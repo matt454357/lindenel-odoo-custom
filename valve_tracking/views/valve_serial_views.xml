@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="valve_serial_tree_view" model="ir.ui.view">
+        <field name="name">valve.serial.tree</field>
+        <field name="model">valve.serial</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <tree string="Valve Serial">
+                <field name="name"/>
+                <field name="mfg_serial"/>
+                <field name="product_tmpl_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="valve_serial_form_view" model="ir.ui.view">
+        <field name="name">valve.serial.form</field>
+        <field name="model">valve.serial</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <form string="Valve Serial">
+                <sheet>
+                    <group>
+                        <!--<field name="name"/>-->
+                        <label for="name" class="oe_inline"/>
+                        <div class="o_row">
+                            <field name="name" attrs="{'required':[('get_next_serial', '=', False)], 'readonly':[('get_next_serial', '=', True)]}"/>
+                            <div class="oe_edit_only"><field name="get_next_serial"/>Get Next</div>
+                        </div>
+                        <!--<field name="mfg_serial"/>-->
+                        <label for="mfg_serial" class="oe_inline"/>
+                        <div class="o_row">
+                            <field name="mfg_serial" attrs="{'required':[('get_dummy_mfg_serial', '=', False)], 'readonly':[('get_dummy_mfg_serial', '=', True)]}"/>
+                            <div class="oe_edit_only"><field name="get_dummy_mfg_serial"/>Get Dummy</div>
+                        </div>
+                        <field name="product_tmpl_id"/>
+                    </group>
+                    <notebook>
+                        <page name="moves" string="Moves">
+                            <field name="move_ids"/>
+                        </page>
+                        <page name="repairs" string="Repairs">
+                            <field name="repair_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_valve_serial" model="ir.actions.act_window">
+        <field name="name">Valve Serials</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">valve.serial</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Valve Serial
+            </p>
+        </field>
+    </record>
+
+    <record id="valve_serial_action_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="valve_tracking.valve_serial_tree_view"/>
+        <field name="act_window_id" ref="valve_tracking.action_valve_serial"/>
+    </record>
+
+    <record id="valve_serial_action_view_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="valve_tracking.valve_serial_form_view"/>
+        <field name="act_window_id" ref="valve_tracking.action_valve_serial"/>
+    </record>
+
+</odoo>

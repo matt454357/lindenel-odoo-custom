@@ -2,18 +2,30 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
-    "name": "Exchange Core Tracking",
-    "summary": "Track exchanged product cores without the management overhead of inventory or invoices.",
+    "name": "Valve Exchange Tracking",
+    "summary": "Track exchanged products without the management overhead of inventory or invoices.",
     "version": "15.0.1.0.0",
     "development_status": "Beta",
     "author": "Matt Taylor",
     "website": "https://github.com/matt454357/lindenel-odoo-custom",
     'category': 'Invoices & Payments',
-    "depends": ['base', 'product', 'mail'],
+    "depends": ['base', 'product', 'hr', 'mail', 'web_m2x_options', 'barcodes'],
     "license": "AGPL-3",
+    'assets': {
+        'web.assets_backend': [
+            '/valve_tracking/static/src/js/move_barcode_handler.js',
+        ]
+    },
     "data": [
+        "data/ir_sequence_data.xml",
+        "data/product_category_data.xml",
         "security/ir.model.access.csv",
-        "views/core_exchange_views.xml",
+        "views/valve_move_views.xml",
+        "views/valve_repair_views.xml",
+        "views/valve_serial_views.xml",
+        "views/qb_invoice_views.xml",
+        "wizards/wizard_valve_move_in_scan_views.xml",
+        "views/valve_tracking_menu_views.xml",
     ],
     "installable": True,
     "auto_install": False,

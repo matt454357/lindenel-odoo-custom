@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="seq_lei_serial" model="ir.sequence">
+            <field name="name">LEI Serial</field>
+            <field name="code">lei.serial</field>
+            <field name="prefix">%(y)s</field>
+            <field eval="500" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="4" name="padding"/>
+            <field eval="False" name="company_id"/>
+        </record>
+
+        <record id="seq_na_mfg_serial" model="ir.sequence">
+            <field name="name">NA MFG Serial</field>
+            <field name="code">na.mfg.serial</field>
+            <field name="prefix">NA</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="5" name="padding"/>
+            <field eval="False" name="company_id"/>
+        </record>
+
+        <record id="seq_valve_move_number" model="ir.sequence">
+            <field name="name">Valve Move Number</field>
+            <field name="code">valve.move.number</field>
+            <field eval="31001" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="False" name="company_id"/>
+        </record>
+
+    </data>
+</odoo>

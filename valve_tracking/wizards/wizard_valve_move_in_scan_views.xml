@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="wizard_valve_move_in_scan_form" model="ir.ui.view">
+        <field name="name">wizard.valve.move.in.scan.form</field>
+        <field name="model">wizard.valve.move.in.scan</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <form string="Scan Receipt">
+                <field name="scan_error" invisible="1"/>
+                <field name="_barcode_scanned" widget="move_barcode_handler" invisible="1"/>
+                <div style="color: #dc3545" attrs="{'invisible': [('scan_error', '=', False)]}">
+                    <b>You scanned an unrecognized barcode: <i><field name="scan_name" nolabel="1" readonly="1"/></i></b>
+                    <ul name="possible_errors">
+                        <li>No manufacturing order with this name</li>
+                        <li>No matching production kit was found</li>
+                    </ul>
+                </div>
+                <div class="text-left" style="background-color: #CCECDB;color:#005326;">
+                    <b>Scan a Barcode for one of the following:</b>
+                    <ul name="possible_objects">
+                        <li>Manufacturing Order</li>
+                        <li>Production Kit</li>
+                    </ul>
+                </div>
+
+                <group>
+                    <field name="core_move_id" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <field name="valve_serial_id" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <field name="move_type" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <field name="type_code" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <field name="partner_id" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <field name="core_track_num" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                </group>
+
+                <footer>
+                    <button name="action_complete" type="object" string="Complete" class="btn-primary"
+                            attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_valve_move_in_scan" model="ir.actions.act_window">
+        <field name="name">Scan Receipts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.valve.move.in.scan</field>
+        <field name="view_id" ref="valve_tracking.wizard_valve_move_in_scan_form"/>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+    <record id="wizard_valve_move_in_scan_action_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="valve_tracking.wizard_valve_move_in_scan_form"/>
+        <field name="act_window_id" ref="valve_tracking.action_wizard_valve_move_in_scan"/>
+    </record>
+
+</odoo>
