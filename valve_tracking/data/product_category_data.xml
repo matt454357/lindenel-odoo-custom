@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <record id="prod_cat_exchange" model="product.category">
-            <field name="parent_id" ref="product.product_category_all"/>
-            <field name="name">Exchange</field>
+        <record id="prod_cat_valves" model="product.category">
+            <field name="name">Valves</field>
         </record>
-        <record id="prod_cat_valve" model="product.category">
-            <field name="parent_id" ref="product.product_category_all"/>
-            <field name="name">Valve</field>
+
+        <record id="prod_cat_quickbooks" model="product.category">
+            <field name="name">QuickBooks</field>
         </record>
-        <record id="prod_cat_ship" model="product.category">
-            <field name="parent_id" ref="product.product_category_all"/>
-            <field name="name">Shipping</field>
+        <record id="prod_cat_qb_valve_exchange" model="product.category">
+            <field name="parent_id" ref="valve_tracking.prod_cat_quickbooks"/>
+            <field name="name">QB Valve Exchange</field>
         </record>
-        <record id="prod_cat_other" model="product.category">
-            <field name="parent_id" ref="product.product_category_all"/>
-            <field name="name">Other</field>
+        <record id="prod_cat_qb_valve_repair" model="product.category">
+            <field name="parent_id" ref="valve_tracking.prod_cat_quickbooks"/>
+            <field name="name">QB Valve Repair</field>
+        </record>
+        <record id="prod_cat_qb_valve_purchase" model="product.category">
+            <field name="parent_id" ref="valve_tracking.prod_cat_quickbooks"/>
+            <field name="name">QB Valve Purchase</field>
+        </record>
+        <record id="prod_cat_qb_ship" model="product.category">
+            <field name="parent_id" ref="valve_tracking.prod_cat_quickbooks"/>
+            <field name="name">QB Shipping</field>
+        </record>
+        <record id="prod_cat_qb_warranty" model="product.category">
+            <field name="parent_id" ref="valve_tracking.prod_cat_quickbooks"/>
+            <field name="name">QB Warranty</field>
+        </record>
+        <record id="prod_cat_qb_kit" model="product.category">
+            <field name="parent_id" ref="valve_tracking.prod_cat_quickbooks"/>
+            <field name="name">QB Kit</field>
+        </record>
+        <record id="prod_cat_qb_parts" model="product.category">
+            <field name="parent_id" ref="valve_tracking.prod_cat_quickbooks"/>
+            <field name="name">QB Parts</field>
+        </record>
+        <record id="prod_cat_qb_other" model="product.category">
+            <field name="parent_id" ref="valve_tracking.prod_cat_quickbooks"/>
+            <field name="name">QB Other</field>
         </record>
     </data>
 </odoo>

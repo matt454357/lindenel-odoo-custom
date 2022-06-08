@@ -13,6 +13,7 @@ class QbInvoice(models.Model):
         compute='_compute_name',
         store=True,
         copy=False,
+        readonly=True,
     )
     qb_invoice_id = fields.Many2one(
         comodel_name='qb.invoice',
@@ -49,4 +50,4 @@ class QbInvoice(models.Model):
     @api.depends('qb_invoice_id', 'product_tmpl_id')
     def _compute_name(self):
         for rec in self:
-            rec.name = "[%s] %s" % (rec.qb_invoice_id.name, rec.product_tmpl_id)
+            rec.name = "[%s] %s" % (rec.qb_invoice_id.name, rec.product_tmpl_id.name)

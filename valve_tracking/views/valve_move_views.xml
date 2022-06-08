@@ -108,7 +108,9 @@
                             <field name="core_track_num" readonly="1"/>
                             <field name="qb_invoice_line_id" required="1"/>
                             <field name="qb_invoice_id"/>
+                            <!-- onchange can't save value of readonly fields https://stackoverflow.com/a/51063033 -->
                             <field name="partner_id" readonly="1"/>
+                            <field name="partner_id" invisible="1"/>
                             <field name="ship_address"/>
                         </group>
                     </group>

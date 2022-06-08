@@ -112,6 +112,7 @@ class ValveMove(models.Model):
     @api.onchange('qb_invoice_id')
     def _onchange_qb_invoice_id(self):
         self.partner_id = self.qb_invoice_id.partner_id
+        #self.write({'partner_id': self.qb_invoice_id.partner_id})
 
     def action_confirm(self):
         self.ensure_one()
@@ -160,7 +161,7 @@ class ValveMove(models.Model):
                                            "you will have to match it up manually.")
                     self.state = 'waiting'
             else:
-                self.core_track_num = "%s%s" % (self.name, self.valve_serial_id.name)
+                self.core_track_num = "%s%s" % (self.valve_serial_id.name, self.name)
                 self.message_post(body="Waiting for inbound 'Core Exchange'")
                 self.state = 'waiting'
         elif self.type_code in ['d', 'a']:
@@ -249,9 +250,9 @@ class ValveMove(models.Model):
         self.ensure_one()
         if not self.core_track_num:
             return False
-        sent_id = int(self.core_track_num[-5:] or 0)
-        sent = self.browse(sent_id)
-        if sent:
+        sent_move_num = int(self.core_track_num[-5:] or 0)
+        sent = self.search([('name', '=', sent_move_num)])
+        if len(sent) == 1:
             sent.state = 'done'
             return True
         return False

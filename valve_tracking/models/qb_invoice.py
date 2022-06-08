@@ -1,6 +1,5 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-import re
 
 
 class QbInvoice(models.Model):
@@ -8,7 +7,7 @@ class QbInvoice(models.Model):
     _description = 'QuickBooks Invoice'
     _inherit = ['mail.thread']
     _sql_constraints = [
-        ('qb_txn_uniq', 'unique (qb_txn)', "QB TxnID must be unique"),
+        ('qb_ref_uniq', 'unique (qb_ref)', "QB TxnID must be unique"),
     ]
 
     name = fields.Integer(
@@ -17,7 +16,7 @@ class QbInvoice(models.Model):
         copy=False,
         index=True,
     )
-    qb_txn = fields.Char(
+    qb_ref = fields.Char(
         string='QB TxnID',
         required=True,
         copy=False,
@@ -57,7 +56,6 @@ class QbInvoice(models.Model):
         comodel_name='qb.invoice.line',
         inverse_name='qb_invoice_id',
         string="Lines",
-        readonly=True,
     )
 
     ship_addr1 = fields.Char(

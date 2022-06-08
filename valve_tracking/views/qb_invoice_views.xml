@@ -26,17 +26,55 @@
                 <sheet>
                     <group>
                         <group>
+                            <field name="qb_ref" groups="base.group_no_one"/>
                             <field name="name"/>
                             <field name="ship_date"/>
                             <field name="is_paid"/>
+                            <field name="ship_address"/>
                         </group>
                         <group>
                             <field name="partner_id"/>
+                            <field name="txn_date"/>
                             <field name="ship_method"/>
                             <field name="po_number"/>
                         </group>
                     </group>
-                    <field name="qb_invoice_line_ids"/>
+                    <group groups="base.group_no_one">
+                        <group>
+                            <field name="ship_addr1"/>
+                            <field name="ship_addr2"/>
+                            <field name="ship_addr3"/>
+                            <field name="ship_addr4"/>
+                            <field name="ship_addr5"/>
+                        </group>
+                        <group>
+                            <field name="ship_city"/>
+                            <field name="ship_state"/>
+                            <field name="ship_zip"/>
+                            <field name="ship_country"/>
+                        </group>
+                    </group>
+                    <field name="qb_invoice_line_ids">
+                        <tree>
+                            <field name="qb_invoice_id"/>
+                            <field name="name"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="qb_ref" groups="base.group_no_one"/>
+                                    <field name="qb_invoice_id"/>
+                                    <field name="qb_line_seq_num"/>
+                                    <field name="quantity"/>
+                                </group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="product_tmpl_id"/>
+                                    <field name="description"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
