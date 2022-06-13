@@ -16,11 +16,7 @@
                     </ul>
                 </div>
                 <div class="text-left" style="background-color: #CCECDB;color:#005326;">
-                    <b>Scan a Barcode for one of the following:</b>
-                    <ul name="possible_objects">
-                        <li>Manufacturing Order</li>
-                        <li>Production Kit</li>
-                    </ul>
+                    <b>Scan a core tracking ticket</b>
                 </div>
 
                 <group>

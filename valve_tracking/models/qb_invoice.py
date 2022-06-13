@@ -6,6 +6,7 @@ class QbInvoice(models.Model):
     _name = 'qb.invoice'
     _description = 'QuickBooks Invoice'
     _inherit = ['mail.thread']
+    _order = "name desc"
     _sql_constraints = [
         ('qb_ref_uniq', 'unique (qb_ref)', "QB TxnID must be unique"),
     ]
@@ -29,7 +30,6 @@ class QbInvoice(models.Model):
     )
     ship_date = fields.Date(
         string='Ship Date',
-        required=True,
         copy=False,
     )
     is_paid = fields.Boolean(

@@ -35,7 +35,6 @@ class QbInvoice(models.Model):
     product_tmpl_id = fields.Many2one(
         comodel_name='product.template',
         string='Sent Product',
-        required=True,
     )
     description = fields.Char(
         string="Description",

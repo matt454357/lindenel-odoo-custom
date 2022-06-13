@@ -57,7 +57,9 @@
                     <field name="qb_invoice_line_ids">
                         <tree>
                             <field name="qb_invoice_id"/>
-                            <field name="name"/>
+                            <field name="product_tmpl_id"/>
+                            <field name="description"/>
+                            <field name="quantity"/>
                         </tree>
                         <form>
                             <group>

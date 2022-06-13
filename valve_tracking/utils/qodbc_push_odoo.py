@@ -1,4 +1,5 @@
 import sys
+import signal
 import psutil
 import configparser
 import odoorpc
@@ -7,6 +8,7 @@ import os
 from datetime import datetime
 
 # only continue if quickbooks is running
+print("\nStarting Odoo Sync")
 if "QBW32.EXE" not in (p.name() for p in psutil.process_iter()):
     sys.exit("Can't continue without QuickBooks running")
 
@@ -76,8 +78,11 @@ cols_string = ", ".join(cols)
 
 # get customers already existing in odoo
 print("Getting QB customer references from odoo")
-qb_refs = rpc.execute('res.partner', 'read', [], ['qb_ref'])
-qb_refs_string = "', '".join(qb_refs)
+qb_refs = rpc.execute('res.partner', 'read', partner_obj.search([('qb_ref', '!=', False)]), ['qb_ref'])
+qb_refs_string = ''
+if qb_refs:
+    qb_refs_string = "and ListID in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
+odoo_qb_partner_map = {x['qb_ref']: x['id'] for x in qb_refs}
 
 # get recently modified customers from QuickBooks
 sql = """
@@ -85,10 +90,10 @@ sql = """
     from Customer
     where TimeModified>?
     and TimeCreated<=?
-    and ListID in '%s'
+    %s
 """ % (cols_string, qb_refs_string)
 print("Getting modified QB customers")
-cur.execute(sql, (sync_time, sync_time))
+cur.execute(sql, (sync_dt, sync_dt))
 qb_cust_rows = cur.fetchall()
 qb_customers = {}
 for row in qb_cust_rows:
@@ -152,15 +157,18 @@ cols = [
 ]
 cols_string = ", ".join(cols)
 
+if qb_refs:
+    qb_refs_string = "and ListID not in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
+
 # get recently created customers from QuickBooks
 sql = """
     select %s
     from Customer
     where TimeCreated>?
-    and ListID not in '%s'
+    %s
 """ % (cols_string, qb_refs_string)
 print("Getting new QB customers")
-cur.execute(sql, (sync_time, ))
+cur.execute(sql, (sync_dt, ))
 qb_cust_rows = cur.fetchall()
 qb_customers = []
 for row in qb_cust_rows:
@@ -198,8 +206,10 @@ for cust in qb_customers:
 
 # get products already existing in odoo
 print("Getting QB product references from odoo")
-qb_refs = rpc.execute('product.template', 'read', [], ['qb_ref'])
-qb_refs_string = "', '".join(qb_refs)
+qb_refs = rpc.execute('product.template', 'read', template_obj.search([('qb_ref', '!=', False)]), ['qb_ref'])
+qb_refs_string = ''
+if qb_refs:
+    qb_refs_string = "and ListID in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
 
 # get product categories
 odoo_cat_names = [
@@ -239,7 +249,7 @@ qb_odoo_cat_name_map = [
     ('T&E:Travel', 'QB Other'),
     ('T&E:Meals', 'QB Other'),
 ]
-qb_cat_map = {x[0]: odoo_cat_names[x[1]] for x in qb_odoo_cat_name_map}
+qb_cat_map = {x[0]: odoo_cat_map[x[1]] for x in qb_odoo_cat_name_map}
 
 cols = [
     "ListID",
@@ -254,10 +264,10 @@ sql = """
     from Item
     where TimeModified>?
     and TimeCreated<=?
-    and ListID in %s
+    %s
 """ % (cols_string, qb_refs_string)
 print("Getting modified QB products")
-cur.execute(sql, (sync_time, sync_time))
+cur.execute(sql, (sync_dt, sync_dt))
 qb_tmpl_rows = cur.fetchall()
 qb_templates = {}
 for row in qb_tmpl_rows:
@@ -303,6 +313,9 @@ for tmpl in templates:
 # -----------------------------------------------------------------------------
 # create new products
 
+if qb_refs:
+    qb_refs_string = "and ListID not in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
+
 # get recently created products from QuickBooks
 cols = [
     "ListID",
@@ -317,10 +330,10 @@ sql = """
     select %s
     from Item
     where TimeCreated>?
-    and ListID not in %s
+    %s
 """ % (cols_string, qb_refs_string)
 print("Getting new QB products")
-cur.execute(sql, (sync_time, ))
+cur.execute(sql, (sync_dt, ))
 qb_tmpl_rows = cur.fetchall()
 qb_templates = []
 for row in qb_tmpl_rows:
@@ -345,10 +358,10 @@ for tmpl in qb_templates:
     vals = {
         'type': 'consu',
         'categ_id': new_cat_id,
-        'ref': tmpl['ListID'],
+        'qb_ref': tmpl['ListID'],
         'name': tmpl['FullName'],
         'description': tmpl['SalesOrPurchaseDesc'],
-        'list_price': float(tmpl['SalesOrPurchasePrice']),
+        'list_price': float(tmpl['SalesOrPurchasePrice'] or 0.0),
         'default_code': seq_obj.next_by_code('qb.part.code')
     }
     template_obj.create(vals)
@@ -362,8 +375,10 @@ for tmpl in qb_templates:
 
 # get invoices already existing in odoo
 print("Getting QB invoice references from odoo")
-qb_refs = rpc.execute('qb.invoice', 'read', [], ['qb_ref'])
-qb_refs_string = "', '".join(qb_refs)
+qb_refs = rpc.execute('qb.invoice', 'read', qb_invoice_obj.search([('qb_ref', '!=', False)]), ['qb_ref'])
+qb_refs_string = ''
+if qb_refs:
+    qb_refs_string = "and TxnID in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
 
 cols = [
     "TxnID",
@@ -379,10 +394,10 @@ sql = """
     from Invoice
     where TimeModified>?
     and TimeCreated<=?
-    and TxnID in %s
+    %s
 """ % (cols_string, qb_refs_string)
 print("Getting modified QB invoices")
-cur.execute(sql, (sync_time, ))
+cur.execute(sql, (sync_dt, sync_dt))
 qb_rows = cur.fetchall()
 qb_invoices = {}
 qb_txn_ids = []
@@ -402,9 +417,9 @@ print("Updating modified invoices")
 for invoice in invoices:
     vals = {}
     if invoice.txn_date != qb_invoices[invoice.qb_ref]['TxnDate']:
-        vals['txn_date'] = qb_invoices[invoice.qb_ref]['TxnDate']
-    if invoice.ship_date != qb_invoices[invoice.qb_ref]['ShipDate']:
-        vals['ship_date'] = qb_invoices[invoice.qb_ref]['ShipDate']
+        vals['txn_date'] = qb_invoices[invoice.qb_ref]['TxnDate'].strftime("%Y-%m-%d %H:%M:%S")
+    if invoice.ship_date != qb_invoices[invoice.qb_ref]['ShipDate'] and qb_invoices[invoice.qb_ref]['ShipDate']:
+        vals['ship_date'] = qb_invoices[invoice.qb_ref]['ShipDate'].strftime("%Y-%m-%d %H:%M:%S")
     if invoice.is_paid != qb_invoices[invoice.qb_ref]['IsPaid']:
         vals['is_paid'] = qb_invoices[invoice.qb_ref]['IsPaid']
     if invoice.ship_method != qb_invoices[invoice.qb_ref]['ShipMethodRefFullName']:
@@ -422,6 +437,9 @@ for invoice in invoices:
 
 # -----------------------------------------------------------------------------
 # create new invoices
+
+if qb_refs:
+    qb_refs_string = "and TxnID not in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
 
 cols = [
     "TxnID",
@@ -447,10 +465,10 @@ sql = """
     select %s
     from Invoice
     Where TimeCreated>?
-    and TxnID not in %s
+    %s
 """ % (cols_string, qb_refs_string)
 print("Getting new invoices")
-cur.execute(sql, (sync_time, ))
+cur.execute(sql, (sync_dt, ))
 qb_rows = cur.fetchall()
 qb_invoices = []
 qb_customer_ids = []
@@ -461,23 +479,17 @@ for row in qb_rows:
     qb_invoices.append(row_dict)
     qb_customer_ids.append(row_dict['CustomerRefListID'])
 
-# get odoo partners
-print("Getting odoo invoice partners")
-odoo_partner_ids = partner_obj.search([('ref', 'in', qb_customer_ids)])
-odoo_partners = partner_obj.browse(odoo_partner_ids)
-qb_odoo_partners = {x.ref: x.id for x in odoo_partners}
-
 # create qb invoices in odoo
 print("Creating new invoices")
 for invoice in qb_invoices:
-    partner_id = qb_odoo_partners.get(invoice['CustomerRefListID'])
+    partner_id = odoo_qb_partner_map.get(invoice['CustomerRefListID'])
     if not partner_id:
         sys.exit("Failed to find customer on invoice %s" % invoice['TxnNumber'])
     vals = {
         'name': invoice['TxnNumber'],
         'qb_ref': invoice['TxnID'],
-        'txn_date': invoice['TxnDate'],
-        'ship_date': invoice['ShipDate'],
+        'txn_date': invoice['TxnDate'].strftime("%Y-%m-%d %H:%M:%S"),
+        'ship_date': invoice['ShipDate'] and invoice['ShipDate'].strftime("%Y-%m-%d %H:%M:%S") or False,
         'is_paid': invoice['IsPaid'],
         'partner_id': partner_id,
         'ship_method': invoice['ShipMethodRefFullName'],
@@ -503,8 +515,10 @@ for invoice in qb_invoices:
 
 # get invoice lines already existing in odoo
 print("Getting QB invoice line references from odoo")
-qb_refs = rpc.execute('qb.invoice.line', 'read', [], ['qb_ref'])
-qb_refs_string = "', '".join(qb_refs)
+qb_refs = rpc.execute('qb.invoice.line', 'read', qb_line_obj.search([('qb_ref', '!=', False)]), ['qb_ref'])
+qb_refs_string = ''
+if qb_refs:
+    qb_refs_string = "and InvoiceLineTxnLineID not in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
 
 # get new core exchange invoice lines
 cols = [
@@ -521,10 +535,10 @@ sql = """
     from InvoiceLine
     Where TimeCreated>?
     and InvoiceLineDesc is not null
-    and InvoiceLineTxnLineID not in %s
+    %s
 """ % (cols_string, qb_refs_string)
 print("Getting new invoice lines")
-cur.execute(sql, (sync_time, ))
+cur.execute(sql, (sync_dt, ))
 qb_rows = cur.fetchall()
 qb_inv_lines = []
 qb_inv_ids = []
@@ -540,10 +554,9 @@ for row in qb_rows:
         qb_inv_ids.append(row_dict['TxnID'])
 
 # get qb invoices from odoo
-print("Getting odoo invoices")
-odoo_inv_ids = qb_invoice_obj.search([('qb_ref', 'in', qb_line_item_codes)])
-odoo_invs = qb_invoice_obj.browse(odoo_inv_ids)
-qb_odoo_invs = {x.qb_ref: x.id for x in odoo_invs}
+print("Getting QB invoice ref-id map from odoo")
+qb_inv_ids = rpc.execute('qb.invoice', 'read', qb_invoice_obj.search([('qb_ref', '!=', False)]), ['qb_ref'])
+qb_odoo_invs = {x['qb_ref']: x['id'] for x in qb_inv_ids}
 
 # get odoo products
 print("Getting odoo products")
@@ -559,9 +572,9 @@ for line in qb_inv_lines:
         'qb_invoice_id': qb_invoice_id,
         'qb_ref': line['InvoiceLineTxnLineID'],
         'qb_line_seq_num': line['InvoiceLineSeqNo'],
-        'product_tmpl_id': qb_odoo_prods[line['InvoiceLineItemRefListID']] or False,
-        'description': line['InvoiceLineDesc'],
-        'quantity': line['InvoiceLineQuantity'],
+        'product_tmpl_id': qb_odoo_prods.get(line['InvoiceLineItemRefListID']),
+        'description': line['InvoiceLineDesc'].replace('\00', ''),
+        'quantity': float(line['InvoiceLineQuantity'] or 0),
     }
     qb_line_obj.create(vals)
 
@@ -582,3 +595,14 @@ parser.set('QB', 'sync_time', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 fp = open(conf_file_name, 'w')
 parser.write(fp)
 fp.close()
+
+print("Sync complete\n")
+
+def signal_handler(sig, frame):
+    # close quickbooks connection
+    print('Closing Connections')
+    cur.close()
+    cxn.close()
+    sys.exit("Exited early because of user interupt")
+
+signal.signal(signal.SIGINT, signal_handler)
