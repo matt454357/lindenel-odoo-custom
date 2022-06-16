@@ -100,7 +100,6 @@ for row in qb_cust_rows:
     row_dict = {}
     for col in range(len(cols)):
         row_dict[cols[col]] = row[col]
-    row_dict['SalesOrPurchaseDesc'] = row_dict['SalesOrPurchaseDesc'] and row_dict['SalesOrPurchaseDesc'].strip() or None
     qb_customers[row_dict['ListID']] = row_dict
 qb_cust_list_ids = list(qb_customers.keys())
 
@@ -405,7 +404,6 @@ for row in qb_rows:
     row_dict = {}
     for col in range(len(cols)):
         row_dict[cols[col]] = row[col]
-    qb_invoices.append(row_dict)
     qb_invoices[row_dict['TxnID']] = row_dict
 qb_txn_ids = list(qb_invoices.keys())
 

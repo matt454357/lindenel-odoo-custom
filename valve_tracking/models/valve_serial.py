@@ -40,6 +40,7 @@ class ValveSerial(models.Model):
     product_tmpl_id = fields.Many2one(
         comodel_name='product.template',
         string='Valve',
+        domain=lambda self: [('categ_id', '=', self.env.ref('valve_tracking.prod_cat_valves').id)],
         required=True,
         tracking=True,
     )
