@@ -85,7 +85,7 @@ class QbInvoice(models.Model):
     ship_country = fields.Char(
         string="Ship Country",
     )
-    ship_address = fields.Char(
+    ship_address = fields.Text(
         string="Ship Address",
         compute="_compute_ship_address",
         store=True,

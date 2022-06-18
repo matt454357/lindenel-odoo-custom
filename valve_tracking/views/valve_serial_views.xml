@@ -35,6 +35,7 @@
                             <div class="oe_edit_only"><field name="get_dummy_mfg_serial"/>Get Dummy</div>
                         </div>
                         <field name="product_tmpl_id"/>
+                        <field name="comments"/>
                     </group>
                     <notebook>
                         <page name="moves" string="Moves">

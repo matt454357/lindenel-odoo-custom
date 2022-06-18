@@ -45,7 +45,6 @@ class ValveRepair(models.Model):
     )
     repair_comments = fields.Char(
         string="Repair Comments",
-        required=True,
     )
     partner_id = fields.Many2one(
         comodel_name='res.partner',

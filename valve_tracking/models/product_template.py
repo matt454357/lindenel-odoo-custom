@@ -10,6 +10,6 @@ class ProductTemplate(models.Model):
         return self.env.ref('valve_tracking.prod_cat_valves')
 
     qb_ref = fields.Char(
-        string='Reference',
+        string='QB Reference',
         index=True,
     )

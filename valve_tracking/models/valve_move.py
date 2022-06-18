@@ -96,7 +96,7 @@ class ValveMove(models.Model):
         store=True,
         copy=False,
     )
-    ship_address = fields.Char(
+    ship_address = fields.Text(
         comodel_name='qb.invoice',
         related='qb_invoice_line_id.qb_invoice_id.ship_address',
         string='Ship Address',

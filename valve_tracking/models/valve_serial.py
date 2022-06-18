@@ -44,6 +44,9 @@ class ValveSerial(models.Model):
         required=True,
         tracking=True,
     )
+    comments = fields.Char(
+        string="Comments",
+    )
 
     move_ids = fields.One2many(
         comodel_name='valve.move',
@@ -74,6 +77,8 @@ class ValveSerial(models.Model):
                 vals['mfg_serial'] = re.sub(r'^\s+|\s+$', '', vals['mfg_serial'])
                 # reduce internal whitespace to a single space character
                 vals['mfg_serial'] = re.sub(r'\s+', ' ', vals['mfg_serial'])
+                # force upper case
+                vals['mfg_serial'] = vals['mfg_serial'].upper()
         res = super(ValveSerial, self).create(vals)
         return res
 
@@ -84,4 +89,22 @@ class ValveSerial(models.Model):
             if not re.match(re_pattern, rec.name):
                 message = f'"{rec.name}" Is Invalid.\n' \
                           f'LEI Serial must be 4 to 6 digits, all numbers, and no spaces.'
+                raise UserError(message)
+
+    @api.constrains('mfg_serial')
+    def _constrain_mfg_serial(self):
+        for rec in self:
+            if " " in rec.mfg_serial:
+                message = f'"{rec.mfg_serial}" Is Invalid. Spaces are not allowed.\n' \
+                          "If this is a Dover valve, replace the space with a dash (-).\n" \
+                          "If you really don't want a dash, replace the space with an underscore (_)."
+                raise UserError(message)
+            re_pattern = re.compile(r'^[A-Z0-9_\-]*$')
+            if not re.match(re_pattern, rec.mfg_serial):
+                message = f'"{rec.mfg_serial}" Is Invalid.\n' \
+                          "Serials may only contain the following characters:\n" \
+                          "- Upper Case Letters\n" \
+                          "- Numbers\n" \
+                          "- Dash (-)\n" \
+                          "- Underscore (_)"
                 raise UserError(message)
