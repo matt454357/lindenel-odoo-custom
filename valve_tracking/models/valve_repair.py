@@ -9,16 +9,14 @@ class ValveRepair(models.Model):
 
     valve_serial_id = fields.Many2one(
         comodel_name='valve.serial',
-        string="Repair Number",
+        string="LEI Serial",
         required=True,
     )
     name = fields.Char(
-        string='Number',
-        required=True,
-        copy=False,
+        string='Name',
+        compute='_compute_name',
+        store=True,
         readonly=True,
-        index=True,
-        default=lambda self: _('New'),
     )
     state = fields.Selection(
         selection=[
@@ -45,6 +43,7 @@ class ValveRepair(models.Model):
     )
     repair_comments = fields.Char(
         string="Repair Comments",
+        copy=False,
     )
     partner_id = fields.Many2one(
         comodel_name='res.partner',
@@ -54,15 +53,23 @@ class ValveRepair(models.Model):
     disassemble_emp_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Disassembled',
+        copy=False,
     )
     cleaned_emp_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Cleaned',
+        copy=False,
     )
     assemble_emp_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Assembled',
+        copy=False,
     )
+
+    @api.depends('valve_serial_id', 'repair_date')
+    def _compute_name(self):
+        for rec in self:
+            rec.name = "[%s] %s" % (rec.valve_serial_id.name, rec.repair_date.strftime("%Y-%m-%d"))
 
     def action_done(self):
         for rec in self:

@@ -11,7 +11,7 @@ class QbInvoice(models.Model):
         ('qb_ref_uniq', 'unique (qb_ref)', "QB TxnID must be unique"),
     ]
 
-    name = fields.Integer(
+    name = fields.Char(
         string="Invoice Num",
         required=True,
         copy=False,

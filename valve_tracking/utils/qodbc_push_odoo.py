@@ -279,7 +279,7 @@ qb_tmpl_list_ids = list(qb_templates.keys())
 
 # update odoo products
 print("Getting odoo products")
-template_ids = template_obj.search([('ref', 'in', qb_tmpl_list_ids)])
+template_ids = template_obj.search([('qb_ref', 'in', qb_tmpl_list_ids)])
 templates = template_obj.browse(template_ids)
 print("Updating modified products")
 for tmpl in templates:
@@ -297,8 +297,8 @@ for tmpl in templates:
         vals['name'] = qb_templates[tmpl.qb_ref]['FullName']
     if tmpl.list_price != qb_templates[tmpl.qb_ref]['SalesOrPurchasePrice']:
         vals['list_price'] = qb_templates[tmpl.qb_ref]['SalesOrPurchasePrice']
-    if tmpl.list_price != qb_templates[tmpl.qb_ref]['SalesOrPurchaseDesc']:
-        vals['list_price'] = qb_templates[tmpl.qb_ref]['SalesOrPurchaseDesc']
+    if tmpl.description != qb_templates[tmpl.qb_ref]['SalesOrPurchaseDesc']:
+        vals['description'] = qb_templates[tmpl.qb_ref]['SalesOrPurchaseDesc']
     if tmpl.categ_id.id != new_cat_id:
         vals['categ_id'] = new_cat_id
     if vals:
@@ -441,7 +441,7 @@ if qb_refs:
 
 cols = [
     "TxnID",
-    "TxnNumber",
+    "RefNumber",
     "CustomerRefListID",
     "IsPaid",
     "TxnDate",
@@ -482,9 +482,9 @@ print("Creating new invoices")
 for invoice in qb_invoices:
     partner_id = odoo_qb_partner_map.get(invoice['CustomerRefListID'])
     if not partner_id:
-        sys.exit("Failed to find customer on invoice %s" % invoice['TxnNumber'])
+        sys.exit("Failed to find customer on invoice %s" % invoice['RefNumber'])
     vals = {
-        'name': invoice['TxnNumber'],
+        'name': invoice['RefNumber'],
         'qb_ref': invoice['TxnID'],
         'txn_date': invoice['TxnDate'].strftime("%Y-%m-%d %H:%M:%S"),
         'ship_date': invoice['ShipDate'] and invoice['ShipDate'].strftime("%Y-%m-%d %H:%M:%S") or False,
@@ -514,9 +514,9 @@ for invoice in qb_invoices:
 # get invoice lines already existing in odoo
 print("Getting QB invoice line references from odoo")
 qb_refs = rpc.execute('qb.invoice.line', 'read', qb_line_obj.search([('qb_ref', '!=', False)]), ['qb_ref'])
-qb_refs_string = ''
-if qb_refs:
-    qb_refs_string = "and InvoiceLineTxnLineID not in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
+# qb_refs_string = ''
+# if qb_refs:
+#     qb_refs_string = "and InvoiceLineTxnLineID not in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
 
 # get new core exchange invoice lines
 cols = [
@@ -533,8 +533,7 @@ sql = """
     from InvoiceLine
     Where TimeCreated>?
     and InvoiceLineDesc is not null
-    %s
-""" % (cols_string, qb_refs_string)
+""" % (cols_string, )
 print("Getting new invoice lines")
 cur.execute(sql, (sync_dt, ))
 qb_rows = cur.fetchall()
@@ -545,6 +544,8 @@ for row in qb_rows:
     row_dict = {}
     for col in range(len(cols)):
         row_dict[cols[col]] = row[col]
+    if row_dict['InvoiceLineTxnLineID'] in qb_refs:
+        continue
     qb_inv_lines.append(row_dict)
     if row_dict['InvoiceLineItemRefListID'] and row_dict['InvoiceLineItemRefListID'] not in qb_line_item_codes:
         qb_line_item_codes.append(row_dict['InvoiceLineItemRefListID'])
