@@ -71,6 +71,11 @@ class ValveMove(models.Model):
         string='Customer',
         required=True,
     )
+    is_warranty = fields.Boolean(
+        string='Possible Warranty',
+        required=True,
+        default=False,
+    )
     type_code = fields.Selection(
         selection=[
             ('r', '[R] Repair & Return'),
@@ -78,7 +83,7 @@ class ValveMove(models.Model):
             ('3', '[3] 3 for 1 Exchange'),
             ('d', '[D] Donated'),
             ('a', '[A] Account Credit'),
-            ('w', '[W] Warranty'),
+            ('s', '[S] Outright Sale'),
         ],
         string="Type Code",
         required=True,

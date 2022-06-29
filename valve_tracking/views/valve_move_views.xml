@@ -10,6 +10,7 @@
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="move_type"/>
+                <field name="is_warranty"/>
                 <field name="type_code"/>
                 <field name="move_date"/>
                 <field name="valve_serial_id"/>
@@ -52,6 +53,7 @@
                         <group>
                             <field name="core_track_num"/>
                             <field name="partner_id"/>
+                            <field name="is_warranty"/>
                         </group>
                     </group>
                     <field name="move_return_ids"/>
@@ -73,6 +75,7 @@
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="move_type"/>
+                <field name="is_warranty"/>
                 <field name="type_code"/>
                 <field name="move_date"/>
                 <field name="valve_serial_id"/>
@@ -103,6 +106,7 @@
                             <field name="type_code"/>
                             <field name="move_date"/>
                             <field name="product_tmpl_id"/>
+                            <field name="is_warranty"/>
                         </group>
                         <group>
                             <field name="core_track_num" readonly="1"/>
