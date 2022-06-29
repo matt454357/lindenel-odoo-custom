@@ -44,6 +44,9 @@
                         <page name="repairs" string="Repairs">
                             <field name="repair_ids"/>
                         </page>
+                        <page name="invoice_lines" string="Invoice Lines">
+                            <field name="qb_invoice_line_ids"/>
+                        </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">

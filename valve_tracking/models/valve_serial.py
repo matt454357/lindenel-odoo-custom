@@ -44,7 +44,7 @@ class ValveSerial(models.Model):
         required=True,
         tracking=True,
     )
-    comments = fields.Char(
+    comments = fields.Text(
         string="Comments",
     )
 
@@ -55,6 +55,11 @@ class ValveSerial(models.Model):
     )
     repair_ids = fields.One2many(
         comodel_name='valve.repair',
+        inverse_name='valve_serial_id',
+        readonly=True,
+    )
+    qb_invoice_line_ids = fields.One2many(
+        comodel_name='qb.invoice.line',
         inverse_name='valve_serial_id',
         readonly=True,
     )

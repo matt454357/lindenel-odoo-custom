@@ -107,7 +107,7 @@ qb_cust_list_ids = list(qb_customers.keys())
 print("Getting odoo customers")
 partner_ids = partner_obj.search([('ref', 'in', qb_cust_list_ids)])
 partners = partner_obj.browse(partner_ids)
-print("Updating modified customers")
+print("Updating %s modified customers" % len(qb_customers))
 for partner in partners:
     vals = {}
     if partner.name != qb_customers[partner.ref]['Name']:
@@ -177,7 +177,7 @@ for row in qb_cust_rows:
     qb_customers.append(row_dict)
 
 # create odoo customers
-print("Creating new customers")
+print("Creating %s new customers" % len(qb_customers))
 for cust in qb_customers:
     vals = {}
     vals['qb_ref'] = cust['ListID']
@@ -281,7 +281,7 @@ qb_tmpl_list_ids = list(qb_templates.keys())
 print("Getting odoo products")
 template_ids = template_obj.search([('qb_ref', 'in', qb_tmpl_list_ids)])
 templates = template_obj.browse(template_ids)
-print("Updating modified products")
+print("Updating %s modified products" % len(qb_templates))
 for tmpl in templates:
     vals = {}
     new_cat_id = qb_cat_map.get(qb_templates[tmpl.qb_ref]['SalesOrPurchaseAccountRefFullName'])
@@ -343,7 +343,7 @@ for row in qb_tmpl_rows:
     qb_templates.append(row_dict)
 
 # create odoo products
-print("Creating new products")
+print("Creating %s new products" % len(qb_templates))
 for tmpl in qb_templates:
     new_cat_id = qb_cat_map.get(tmpl['SalesOrPurchaseAccountRefFullName'])
     if tmpl['SalesOrPurchaseAccountRefFullName'] == 'VALVES':
@@ -372,13 +372,6 @@ for tmpl in qb_templates:
 # -----------------------------------------------------------------------------
 # update modified invoices
 
-# get invoices already existing in odoo
-print("Getting QB invoice references from odoo")
-qb_refs = rpc.execute('qb.invoice', 'read', qb_invoice_obj.search([('qb_ref', '!=', False)]), ['qb_ref'])
-qb_refs_string = ''
-if qb_refs:
-    qb_refs_string = "and TxnID in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
-
 cols = [
     "TxnID",
     "IsPaid",
@@ -393,8 +386,7 @@ sql = """
     from Invoice
     where TimeModified>?
     and TimeCreated<=?
-    %s
-""" % (cols_string, qb_refs_string)
+""" % (cols_string, )
 print("Getting modified QB invoices")
 cur.execute(sql, (sync_dt, sync_dt))
 qb_rows = cur.fetchall()
@@ -411,7 +403,7 @@ qb_txn_ids = list(qb_invoices.keys())
 print("Getting odoo invoices")
 invoice_ids = qb_invoice_obj.search([('qb_ref', 'in', qb_txn_ids)])
 invoices = qb_invoice_obj.browse(invoice_ids)
-print("Updating modified invoices")
+print("Updating %s modified invoices" % len(qb_invoices))
 for invoice in invoices:
     vals = {}
     if invoice.txn_date != qb_invoices[invoice.qb_ref]['TxnDate']:
@@ -436,8 +428,10 @@ for invoice in invoices:
 # -----------------------------------------------------------------------------
 # create new invoices
 
-if qb_refs:
-    qb_refs_string = "and TxnID not in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
+# get invoices already existing in odoo
+print("Getting QB invoice references from odoo")
+qb_refs = rpc.execute('qb.invoice', 'read', qb_invoice_obj.search([('qb_ref', '!=', False)]), ['qb_ref'])
+qb_ref_list = [x['qb_ref'] for x in qb_refs]
 
 cols = [
     "TxnID",
@@ -463,8 +457,7 @@ sql = """
     select %s
     from Invoice
     Where TimeCreated>?
-    %s
-""" % (cols_string, qb_refs_string)
+""" % (cols_string, )
 print("Getting new invoices")
 cur.execute(sql, (sync_dt, ))
 qb_rows = cur.fetchall()
@@ -474,11 +467,13 @@ for row in qb_rows:
     row_dict = {}
     for col in range(len(cols)):
         row_dict[cols[col]] = row[col]
+    if row_dict['TxnID'] in qb_ref_list:
+        continue
     qb_invoices.append(row_dict)
     qb_customer_ids.append(row_dict['CustomerRefListID'])
 
 # create qb invoices in odoo
-print("Creating new invoices")
+print("Creating %s new invoices" % len(qb_invoices))
 for invoice in qb_invoices:
     partner_id = odoo_qb_partner_map.get(invoice['CustomerRefListID'])
     if not partner_id:
@@ -514,9 +509,7 @@ for invoice in qb_invoices:
 # get invoice lines already existing in odoo
 print("Getting QB invoice line references from odoo")
 qb_refs = rpc.execute('qb.invoice.line', 'read', qb_line_obj.search([('qb_ref', '!=', False)]), ['qb_ref'])
-# qb_refs_string = ''
-# if qb_refs:
-#     qb_refs_string = "and InvoiceLineTxnLineID not in ('%s')" % "', '".join([x['qb_ref'] for x in qb_refs])
+qb_ref_list = [x['qb_ref'] for x in qb_refs]
 
 # get new core exchange invoice lines
 cols = [
@@ -544,7 +537,7 @@ for row in qb_rows:
     row_dict = {}
     for col in range(len(cols)):
         row_dict[cols[col]] = row[col]
-    if row_dict['InvoiceLineTxnLineID'] in qb_refs:
+    if row_dict['InvoiceLineTxnLineID'] in qb_ref_list:
         continue
     qb_inv_lines.append(row_dict)
     if row_dict['InvoiceLineItemRefListID'] and row_dict['InvoiceLineItemRefListID'] not in qb_line_item_codes:
@@ -564,7 +557,7 @@ odoo_prods = template_obj.browse(odoo_prod_ids)
 qb_odoo_prods = {x.qb_ref: x.id for x in odoo_prods}
 
 # create qb invoice lines in odoo
-print("Creating new invoice lines")
+print("Creating %s new invoice lines" % len(qb_inv_lines))
 for line in qb_inv_lines:
     qb_invoice_id = qb_odoo_invs.get(line['TxnID'])
     vals = {
@@ -590,6 +583,7 @@ cxn.close()
 
 
 # write now() to the config file sync_time
+print("Saving timestamp of successful sync")
 parser.set('QB', 'sync_time', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 fp = open(conf_file_name, 'w')
 parser.write(fp)

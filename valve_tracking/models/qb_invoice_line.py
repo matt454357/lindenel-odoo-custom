@@ -45,6 +45,11 @@ class QbInvoice(models.Model):
         required=True,
         default=1,
     )
+    valve_serial_id = fields.Many2one(
+        comodel_name='valve.serial',
+        string="LEI Serial",
+        copy=False,
+    )
 
     @api.depends('qb_invoice_id', 'product_tmpl_id')
     def _compute_name(self):

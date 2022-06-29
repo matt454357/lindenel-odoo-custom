@@ -108,6 +108,10 @@ class ValveMove(models.Model):
         copy=False,
         help="Core Tracking Number is composed of <LEI Serial><Move Number>",
     )
+    comments = fields.Text(
+        string="Comments",
+        copy=False,
+    )
 
     @api.onchange('qb_invoice_id')
     def _onchange_qb_invoice_id(self):

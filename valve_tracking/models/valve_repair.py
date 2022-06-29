@@ -41,7 +41,7 @@ class ValveRepair(models.Model):
         string='Sent Product',
         related='valve_serial_id.product_tmpl_id',
     )
-    repair_comments = fields.Char(
+    repair_comments = fields.Text(
         string="Repair Comments",
         copy=False,
     )
@@ -63,6 +63,17 @@ class ValveRepair(models.Model):
     assemble_emp_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Assembled',
+        copy=False,
+    )
+
+    qb_invoice_id = fields.Many2one(
+        comodel_name='qb.invoice',
+        string='QB Invoice',
+        copy=False,
+    )
+    qb_invoice_line_id = fields.Many2one(
+        comodel_name='qb.invoice.line',
+        string='QB Invoice Line',
         copy=False,
     )
 

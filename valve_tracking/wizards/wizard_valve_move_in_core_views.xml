@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="wizard_valve_move_in_core_form" model="ir.ui.view">
+        <field name="name">wizard.valve.move.in.core.form</field>
+        <field name="model">wizard.valve.move.in.core</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <form string="Scan Core">
+                <group>
+                    <field name="core_track_num"/>
+                    <field name="core_move_id" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <field name="move_type" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <field name="valve_serial_id" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <field name="type_code" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <field name="partner_id" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                </group>
+                <footer>
+                    <button name="action_complete" type="object" string="Complete" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_valve_move_in_core" model="ir.actions.act_window">
+        <field name="name">Scan Core</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.valve.move.in.core</field>
+        <field name="view_id" ref="valve_tracking.wizard_valve_move_in_core_form"/>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+    <record id="wizard_valve_move_in_core_action_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="valve_tracking.wizard_valve_move_in_core_form"/>
+        <field name="act_window_id" ref="valve_tracking.action_wizard_valve_move_in_core"/>
+    </record>
+
+</odoo>

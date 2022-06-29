@@ -114,6 +114,7 @@
                             <field name="ship_address"/>
                         </group>
                     </group>
+                    <field name="comments"/>
                     <field name="move_return_ids"/>
                 </sheet>
                 <div class="oe_chatter">
