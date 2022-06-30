@@ -21,6 +21,17 @@ class QbInvoice(models.Model):
         required=True,
         copy=False,
     )
+    partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        related='qb_invoice_id.partner_id',
+        string='Customer',
+        store=True,
+    )
+    ship_date = fields.Date(
+        string='Ship Date',
+        related='qb_invoice_id.ship_date',
+        store=True,
+    )
     qb_ref = fields.Char(
         string='InvoiceLineTxnLineID',
         required=True,

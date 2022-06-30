@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
+    <record id="qb_invoice_line_tree_view" model="ir.ui.view">
+        <field name="name">qb.invoice.line.tree</field>
+        <field name="model">qb.invoice.line</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <tree string="QB Invoice Line">
+                <field name="qb_invoice_id"/>
+                <field name="partner_id"/>
+                <field name="ship_date"/>
+                <field name="product_tmpl_id"/>
+            </tree>
+        </field>
+    </record>
+
     <record id="qb_invoice_tree_view" model="ir.ui.view">
         <field name="name">qb.invoice.tree</field>
         <field name="model">qb.invoice</field>
