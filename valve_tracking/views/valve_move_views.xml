@@ -134,11 +134,11 @@
         <field name="model">valve.move</field>
         <field name="arch" type="xml">
             <search string="Valve Shipments">
-                <field name="name" filter_domain="[('name','ilike',self)]" string="Move Num"/>
                 <field name="valve_serial_id" filter_domain="[('valve_serial_id','ilike',self)]" string="Serial Num"/>
                 <field name="partner_id" filter_domain="[('partner_id','ilike',self)]" string="Customer"/>
                 <field name="qb_invoice_id" filter_domain="[('qb_invoice_id','ilike',self)]" string="Invoice Num"/>
                 <field name="product_tmpl_id" filter_domain="[('product_tmpl_id','ilike',self)]" string="Valve"/>
+                <field name="name" filter_domain="[('name','ilike',self)]" string="Move Num"/>
                 <separator/>
                 <filter name="cores" string="Cores" domain="[('move_type','=','c')]"/>
                 <separator/>
