@@ -117,6 +117,16 @@ class ValveMove(models.Model):
         string="Comments",
         copy=False,
     )
+    track_code128 = fields.Char(
+        string="Code128 Encoded Name",
+        compute="_compute_code128",
+        store=True,
+    )
+
+    @api.depends('valve_serial_id', 'name')
+    def _compute_code128(self):
+        for rec in self:
+            rec.track_code128 = self.env['barcode.nomenclature'].get_code128_encoding(f"{rec.valve_serial_id.name}{rec.name}")
 
     @api.onchange('qb_invoice_id')
     def _onchange_qb_invoice_id(self):

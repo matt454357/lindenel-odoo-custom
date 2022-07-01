@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_coreticket" model="report.paperformat">
+            <field name="name">Core Ticket</field>
+            <field name="default" eval="True" />
+            <field name="format">custom</field>
+            <field name="page_height">93</field>
+            <field name="page_width">216</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">0</field>
+            <field name="dpi">96</field>
+        </record>
+
+        <record id="report_valve_3_core_tickets" model="ir.actions.report">
+            <field name="name">Core Tickets Triplicate</field>
+            <field name="model">valve.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">valve_tracking.report_coreticket3</field>
+            <field name="report_file">valve_tracking.report_coreticket3</field>
+            <field name="paperformat_id" ref="valve_tracking.paperformat_coreticket"/>
+            <field name="print_report_name">object.product_tmpl_id.display_name</field>
+            <field name="binding_model_id" ref="valve_tracking.model_valve_move"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

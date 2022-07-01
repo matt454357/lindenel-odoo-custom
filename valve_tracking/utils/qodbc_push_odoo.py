@@ -179,20 +179,22 @@ for row in qb_cust_rows:
 # create odoo customers
 print("Creating %s new customers" % len(qb_customers))
 for cust in qb_customers:
-    vals = {}
-    vals['qb_ref'] = cust['ListID']
-    vals['name'] = cust['Name']
-    vals['ref'] = cust['BillAddressAddr1']
-    vals['street'] = cust['BillAddressAddr3']
-    vals['street2'] = cust['BillAddressAddr4']
-    vals['city'] = cust['BillAddressCity']
-    vals['zip'] = cust['BillAddressPostalCode']
     state_id = state_obj.search([('code', '=', cust['BillAddressState'])])
-    vals['state_id'] = state_id and state_id[0] or False
     country_id = country_obj.search([('name', '=', cust['BillAddressCountry'])])
-    vals['country_id'] = country_id and country_id[0] or False
-    vals['email'] = cust['Email']
-    vals['phone'] = cust['Phone']
+    vals = {
+        'company_type': 'company',
+        'qb_ref': cust['ListID'],
+        'name': cust['Name'],
+        'ref': cust['BillAddressAddr1'],
+        'street': cust['BillAddressAddr3'],
+        'street2': cust['BillAddressAddr4'],
+        'city': cust['BillAddressCity'],
+        'zip': cust['BillAddressPostalCode'],
+        'state_id': state_id and state_id[0] or False,
+        'country_id': country_id and country_id[0] or False,
+        'email': cust['Email'],
+        'phone': cust['Phone'],
+    }
     partner_obj.create(vals)
 
 

@@ -9,7 +9,15 @@
     "author": "Matt Taylor",
     "website": "https://github.com/matt454357/lindenel-odoo-custom",
     'category': 'Invoices & Payments',
-    "depends": ['base', 'product', 'hr', 'mail', 'web_m2x_options', 'barcodes'],
+    "depends": [
+        'base',
+        'product',
+        'hr',
+        'mail',
+        'web_m2x_options',
+        'barcodes',
+        'barcode_font',
+    ],
     "license": "AGPL-3",
     'assets': {
         'web.assets_backend': [
@@ -27,6 +35,8 @@
         # "wizards/wizard_valve_move_in_scan_views.xml",
         "wizards/wizard_valve_move_in_core_views.xml",
         "views/valve_tracking_menu_views.xml",
+        "report/valve_report_core_tickets.xml",
+        "report/valve_reports.xml",
     ],
     "installable": True,
     "auto_install": False,
