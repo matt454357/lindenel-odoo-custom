@@ -4,7 +4,7 @@
     <template id="report_coreticket_page">
         <div class="row no-gutters">
             <div class="col-8" style="text-align:left; vertical-align:top; margin:0px 0px 0px 0px;">
-                <div class="row no-gutters" style="text-align:left; vertical-align:top; font-size:24px; margin-top:6px;">
+                <div class="row no-gutters" style="text-align:left; vertical-align:top; font-size:32px; margin-top:6px;">
                     <div class="col-12">
                         <bold>
                             CORE TRACKING TICKET
@@ -30,12 +30,10 @@
                     <div class="col-12">
                         <bold>Delivered To:</bold><br/>
                         <div t-field="o.qb_invoice_line_id.qb_invoice_id.ship_address"/>
-                        <br/><div t-esc="o.env.user.company_id.currency_id"/>
-                        <br/><div t-esc="o.env.user.company_id.currency_id"/>
                     </div>
                 </div>
             </div>
-            <div class="col-4" style="text-align:right; vertical-align:top; margin-top:30px; font-size:12px;">
+            <div class="col-4" style="text-align:right; vertical-align:top; margin-top:30px; font-size:16px;">
                 <table class="table table-sm">
                     <tr>
                         <td><bold>Valve</bold></td>
@@ -62,7 +60,7 @@
                     </tr>
                     <tr>
                         <td><bold>Tracking Number</bold></td>
-                        <td><div t-field="o.name"/></td>
+                        <td><div t-field="o.valve_serial_id"/></td>
                     </tr>
                     <tr>
                         <td colspan="2">

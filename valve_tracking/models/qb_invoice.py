@@ -6,7 +6,7 @@ class QbInvoice(models.Model):
     _name = 'qb.invoice'
     _description = 'QuickBooks Invoice'
     _inherit = ['mail.thread']
-    _order = "name desc"
+    _order = "txn_date desc"
     _sql_constraints = [
         ('qb_ref_uniq', 'unique (qb_ref)', "QB TxnID must be unique"),
     ]

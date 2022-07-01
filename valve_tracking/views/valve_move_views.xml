@@ -129,6 +129,26 @@
         </field>
     </record>
 
+    <record id="valve_move_out_search_view" model="ir.ui.view">
+        <field name="name">valve.move.out.search</field>
+        <field name="model">valve.move</field>
+        <field name="arch" type="xml">
+            <search string="Valve Shipments">
+                <field name="name" filter_domain="[('name','ilike',self)]" string="Move Num"/>
+                <field name="valve_serial_id" filter_domain="[('valve_serial_id','ilike',self)]" string="Serial Num"/>
+                <field name="partner_id" filter_domain="[('partner_id','ilike',self)]" string="Customer"/>
+                <field name="qb_invoice_id" filter_domain="[('qb_invoice_id','ilike',self)]" string="Invoice Num"/>
+                <field name="product_tmpl_id" filter_domain="[('product_tmpl_id','ilike',self)]" string="Valve"/>
+                <separator/>
+                <filter name="cores" string="Cores" domain="[('move_type','=','c')]"/>
+                <separator/>
+                <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="waiting" string="Waiting" domain="[('state','=','waiting')]"/>
+                <filter name="done" string="Done" domain="[('state','=','done')]"/>
+            </search>
+        </field>
+    </record>
+
     <record id="action_valve_move_in" model="ir.actions.act_window">
         <field name="name">Valve Receipts</field>
         <field name="type">ir.actions.act_window</field>
@@ -162,6 +182,7 @@
         <field name="view_mode">tree,kanban,form</field>
         <field name="context">{'default_move_type': 'out'}</field>
         <field name="domain">[('move_type', '=', 'out')]</field>
+        <field name="search_view_id" ref="valve_tracking.valve_move_out_search_view"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create a new Valve Move
