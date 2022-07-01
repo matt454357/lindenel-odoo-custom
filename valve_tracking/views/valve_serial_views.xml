@@ -10,6 +10,7 @@
                 <field name="name"/>
                 <field name="mfg_serial"/>
                 <field name="product_tmpl_id"/>
+                <field name="create_date"/>
             </tree>
         </field>
     </record>

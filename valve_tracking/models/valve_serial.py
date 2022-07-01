@@ -7,6 +7,7 @@ class ValveSerial(models.Model):
     _name = 'valve.serial'
     _description = 'Valve Serial'
     _inherit = ['mail.thread']
+    _order = 'name desc'
     _sql_constraints = [
         ('name_uniq', 'unique (name)', "LEI Serial must be unique"),
         ('mfg_serial_uniq', 'unique (mfg_serial)', "MFG Serial must be unique"),

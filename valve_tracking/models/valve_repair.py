@@ -6,6 +6,7 @@ class ValveRepair(models.Model):
     _name = 'valve.repair'
     _description = 'Valve Repair'
     _inherit = ['mail.thread']
+    _order = 'repair_date desc'
 
     valve_serial_id = fields.Many2one(
         comodel_name='valve.serial',

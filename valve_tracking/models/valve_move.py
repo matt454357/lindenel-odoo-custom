@@ -6,6 +6,7 @@ class ValveMove(models.Model):
     _name = 'valve.move'
     _description = 'Valve Move'
     _inherit = ['mail.thread']
+    _order = 'move_date desc'
 
     name = fields.Char(
         string="Move Number",
