@@ -29,34 +29,35 @@
             <form string="Valve Receipts">
                 <header>
                     <button name="action_confirm" type="object" string="Complete" states="draft,waiting" class="oe_stat_button"/>
+                    <button name="action_set_to_draft" type="object" string="Set To Draft" states="cancel" class="oe_stat_button"/>
+                    <button name="action_get_repair" type="object" string="Get Repair" class="oe_highlight" attrs="{'invisible': [('repair_in_ids', '!=', False)]}"/>
+                    <button name="action_get_repair" type="object" string="Get Repair" class="oe_stat_button" attrs="{'invisible': [('repair_in_ids', '=', False)]}"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="valve_serial_id" options="{'limit': 5, 'create': false, 'create_edit': true}"/>
-                            <!--
-                            <label for="valve_serial_id" class="oe_inline"/>
-                            <div class="o_row">
-                                <field name="valve_serial_id"/>
-                                <button string="New Serial" class="oe_edit_only oe_inline"
-                                        name="action_new_serial_wizard" type="object"
-                                        help="Create New Serial Number"/>
-                            </div>
-                            -->
                             <field name="move_type" invisible="1"/>
+                            <field name="core_track_num"/>
                             <field name="type_code"/>
-                            <field name="move_date"/>
-                            <field name="product_tmpl_id"/>
+                            <field name="is_warranty"/>
+                            <field name="partner_id"/>
                         </group>
                         <group>
-                            <field name="core_track_num"/>
-                            <field name="partner_id"/>
-                            <field name="is_warranty"/>
+                            <field name="move_date"/>
+                            <field name="valve_serial_id" options="{'create_edit': true}"/>
+                            <field name="product_tmpl_id"/>
                         </group>
                     </group>
-                    <field name="move_return_ids"/>
+                    <notebook>
+                        <page name="moves" string="Moves">
+                            <field name="move_return_ids"/>
+                        </page>
+                        <page name="repairs" string="Repairs">
+                            <field name="repair_in_ids"/>
+                        </page>
+                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
@@ -94,7 +95,12 @@
         <field name="arch" type="xml">
             <form string="Valve Shipments">
                 <header>
-                    <button name="action_confirm" type="object" string="Complete" states="draft,waiting" class="oe_stat_button"/>
+                    <button name="action_link_print_repair" type="object" string="Print Repair" class="oe_highlight" attrs="{'invisible': [('repair_out_id', '!=', False)]}"/>
+                    <button name="action_link_print_repair" type="object" string="Print Repair" class="oe_stat_button" attrs="{'invisible': [('repair_out_id', '=', False)]}"/>
+                    <button name="action_confirm" type="object" string="Complete" states="draft,waiting" class="oe_highlight" attrs="{'invisible': [('repair_out_id', '=', False)]}"/>
+                    <button name="action_print_box_label" type="object" string="Print Box Label" states="waiting,done" class="oe_stat_button"/>
+                    <button name="action_print_core_ticket" type="object" string="Print Core Tickets" states="waiting,done" class="oe_stat_button"/>
+                    <button name="action_set_to_draft" type="object" string="Set To Draft" states="cancel" class="oe_stat_button"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -110,6 +116,7 @@
                         </group>
                         <group>
                             <field name="core_track_num" readonly="1"/>
+                            <field name="repair_out_id"/>
                             <field name="qb_invoice_line_id" required="1"/>
                             <field name="qb_invoice_id"/>
                             <!-- onchange can't save value of readonly fields https://stackoverflow.com/a/51063033 -->
@@ -200,6 +207,14 @@
         <field name="view_mode">form</field>
         <field name="view_id" ref="valve_tracking.valve_move_out_form_view"/>
         <field name="act_window_id" ref="valve_tracking.action_valve_move_out"/>
+    </record>
+
+    <record id="production_order_cancel_server_action" model="ir.actions.server">
+        <field name="name">Cancel</field>
+        <field name="model_id" ref="valve_tracking.model_valve_move"/>
+        <field name="state">code</field>
+        <field name="code">records.action_cancel()</field>
+        <field name="binding_model_id" ref="valve_tracking.model_valve_move"/>
     </record>
 
 </odoo>

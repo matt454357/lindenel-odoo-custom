@@ -50,6 +50,12 @@ class ValveRepair(models.Model):
         comodel_name='res.partner',
         string='Customer',
     )
+    in_move_id = fields.Many2one(
+        comodel_name='valve.move',
+        string='Return Move',
+        domain="[('move_type', '=', 'in')]",
+        copy=False,
+    )
 
     disassemble_emp_id = fields.Many2one(
         comodel_name='hr.employee',
@@ -64,6 +70,11 @@ class ValveRepair(models.Model):
     assemble_emp_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Assembled',
+        copy=False,
+    )
+    test_emp_id = fields.Many2one(
+        comodel_name='hr.employee',
+        string='Tested',
         copy=False,
     )
 
@@ -85,7 +96,7 @@ class ValveRepair(models.Model):
 
     def action_done(self):
         for rec in self:
-            if all([rec.disassemble_emp_id, rec.cleaned_emp_id, rec.assemble_emp_id]):
+            if all([rec.disassemble_emp_id, rec.cleaned_emp_id, rec.assemble_emp_id, rec.test_emp_id]):
                 rec.state = 'done'
             else:
                 raise UserError("Can't complete repair record without employee assignments")

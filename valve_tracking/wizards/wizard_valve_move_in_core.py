@@ -59,6 +59,6 @@ class WizardValveMoveInCore(models.TransientModel):
             'partner_id': self.partner_id.id,
             'core_track_num': self.core_track_num,
         })
-        action = self.env.ref('valve_tracking.action_valve_move_in').read()[0]
+        action = self.env.ref('valve_tracking.action_valve_move_in').sudo().read()[0]
         action['res_id'] = move_id.id
         return action

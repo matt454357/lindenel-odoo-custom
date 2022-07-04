@@ -114,15 +114,37 @@ class ValveMove(models.Model):
         copy=False,
         help="Core Tracking Number is composed of <LEI Serial><Move Number>",
     )
-    comments = fields.Text(
-        string="Comments",
-        copy=False,
-    )
     track_code128 = fields.Char(
         string="Code128 Encoded Name",
         compute="_compute_code128",
         store=True,
     )
+    repair_in_ids = fields.One2many(
+        comodel_name='valve.repair',
+        inverse_name='in_move_id',
+        string='Repairs',
+        readonly=True,
+    )
+    repair_out_id = fields.Many2one(
+        comodel_name='valve.repair',
+        string='Repair',
+        # readonly=True,
+    )
+    comments = fields.Text(
+        string="Comments",
+        copy=False,
+    )
+
+    def parse_core_track_num(self, track_num):
+        serial_num = 0
+        move_num = 0
+        if len(track_num) == 11:
+            move_num = track_num[6:11] or 0
+            serial_num = track_num[0:6] or 0
+        if len(track_num) == 10:
+            move_num = track_num[5:10] or 0
+            serial_num = track_num[0:5] or 0
+        return serial_num, move_num
 
     @api.depends('valve_serial_id', 'name')
     def _compute_code128(self):
@@ -134,7 +156,20 @@ class ValveMove(models.Model):
         self.partner_id = self.qb_invoice_id.partner_id
         #self.write({'partner_id': self.qb_invoice_id.partner_id})
 
+    @api.onchange('core_track_num')
+    def _onchange_core_track_num(self):
+        if self.core_track_num:
+            sent_serial_num, sent_move_num = self.parse_core_track_num(self.core_track_num)
+            sent_move = self.search([('name', '=', sent_move_num)])
+            sent_serial = self.valve_serial_id.search([('name', '=', sent_serial_num)])
+            if len(sent_move) == 1:
+                self.partner_id = sent_move.partner_id
+                self.type_code = sent_move.type_code
+                self.is_warranty = sent_move.is_warranty
+
     def action_confirm(self):
+        import pdb
+        pdb.set_trace()
         self.ensure_one()
         if self.valve_serial_id.repair_ids.filtered(lambda x: x.state == 'draft'):
             raise UserError("You need to complete the repair record for this valve before shipping it")
@@ -210,7 +245,7 @@ class ValveMove(models.Model):
             ('id', '!=', self.id),
         ])
         if len(matches) == 1:
-            self.move_return_ids = [(6, 0, matches.id)]
+            self.move_return_ids = [(6, 0, [matches.id])]
             matches.state = 'done'
             return True
         return False
@@ -234,7 +269,7 @@ class ValveMove(models.Model):
                 ('id', '!=', self.id),
             ], order='move_date', limit=1)
         if sent:
-            self.move_return_ids = [(6, 0, sent.id)]
+            self.move_return_ids = [(6, 0, [sent.id])]
             # look for 2 other done receipts linked to the sent valve
             if len(sent.move_return_ids.filtered(lambda x: x.state == 'done')) == 2:
                 sent.state = 'done'
@@ -270,9 +305,73 @@ class ValveMove(models.Model):
         self.ensure_one()
         if not self.core_track_num:
             return False
-        sent_move_num = int(self.core_track_num[-5:] or 0)
-        sent = self.search([('name', '=', sent_move_num)])
-        if len(sent) == 1:
-            sent.state = 'done'
+        sent_serial_num, sent_move_num = self.parse_core_track_num(self.core_track_num)
+        sent_move = self.search([('name', '=', sent_move_num)])
+        if len(sent_move) == 1:
+            self.move_return_ids = [(6, 0, [sent_move.id])]
+            sent_move.state = 'done'
             return True
         return False
+
+    def action_get_repair(self):
+        self.ensure_one()
+        if self.move_type != 'in':
+            raise UserError("This is only for creating repairs from valve shipments")
+        action = self.env['ir.actions.act_window']._for_xml_id('valve_tracking.action_valve_repair')
+        # action = self.env.ref('valve_tracking.valve_repair_action_view_form').sudo().read()[0]
+        action['view_mode'] = 'form'
+        action['views'] = []
+        if len(self.repair_in_ids) > 1:
+            action['view_mode'] = 'tree'
+            action['domain'] = [('in_move_id', 'in', self.repair_in_ids.ids)]
+        elif len(self.repair_in_ids) == 1:
+            action['res_id'] = self.repair_in_ids[0].id
+        else:
+            action['context'] = {
+                'default_valve_serial_id': self.valve_serial_id.id,
+                'default_partner_id': self.partner_id.id,
+                'default_in_move_id': self.id,
+            }
+        return action
+
+    def action_link_print_repair(self):
+        self.ensure_one()
+        if self.move_type != 'out':
+            raise UserError("This is only for printing valve shipments")
+        if not self.repair_out_id:
+            repair = self.env['valve.repair'].search([
+                ('valve_serial_id', '=', self.valve_serial_id.id),
+                ('state', '=', 'draft')
+            ])
+            if not repair:
+                raise UserError("No open repair found for this valve serial number")
+            self.repair_out_id = repair
+            repair.state = 'done'
+        return self.env.ref('valve_tracking.report_valve_repair_sheet_ship').report_action(self)
+
+    def action_print_box_label(self):
+        self.ensure_one()
+        if self.move_type != 'out':
+            raise UserError("This is only for printing valve shipments")
+        self.state = 'done'
+        return self.env.ref('valve_tracking.report_valve_box_label').report_action(self)
+
+    def action_print_core_ticket(self):
+        self.ensure_one()
+        if self.move_type != 'out':
+            raise UserError("This is only for printing valve shipments")
+        if not self.state == 'done':
+            raise UserError("Complete the shipment before printing the core ticket")
+        return self.env.ref('valve_tracking.report_valve_3_core_tickets').report_action(self)
+
+    def action_set_to_draft(self):
+        self.ensure_one()
+        if self.state != 'cancel':
+            raise UserError("Move must first be cancelled")
+        self.state = 'draft'
+        return True
+
+    def action_cancel(self):
+        self.ensure_one()
+        self.state = 'cancel'
+        return True

@@ -18,16 +18,81 @@
             <field name="dpi">100</field>
         </record>
 
+        <record id="paperformat_lei_letter" model="report.paperformat">
+            <field name="name">LEI Letter</field>
+            <field name="default" eval="True" />
+            <field name="format">Letter</field>
+            <!--<field name="page_height">279</field>
+            <field name="page_width">216</field>-->
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">0</field>
+            <field name="dpi">81</field>
+        </record>
+
         <record id="report_valve_3_core_tickets" model="ir.actions.report">
-            <field name="name">Core Tickets Triplicate</field>
+            <field name="name">Core Ticket 3x</field>
             <field name="model">valve.move</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">valve_tracking.report_coreticket3</field>
             <field name="report_file">valve_tracking.report_coreticket3</field>
             <field name="paperformat_id" ref="valve_tracking.paperformat_coreticket"/>
             <field name="print_report_name">object.product_tmpl_id.display_name</field>
+            <field name="binding_model_id" eval="False"/>
+            <!--
             <field name="binding_model_id" ref="valve_tracking.model_valve_move"/>
             <field name="binding_type">report</field>
+            -->
         </record>
+
+        <record id="report_valve_box_label" model="ir.actions.report">
+            <field name="name">Box Label</field>
+            <field name="model">valve.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">valve_tracking.report_box_label</field>
+            <field name="report_file">valve_tracking.report_box_label</field>
+            <field name="paperformat_id" ref="valve_tracking.paperformat_lei_letter"/>
+            <!--<field name="paperformat_id" ref="base.paperformat_us"/>-->
+            <field name="print_report_name">object.valve_serial_id.name</field>
+            <field name="binding_model_id" eval="False"/>
+            <!--
+            <field name="binding_model_id" ref="valve_tracking.model_valve_move"/>
+            <field name="binding_type">report</field>
+            -->
+        </record>
+
+        <record id="report_valve_repair_sheet" model="ir.actions.report">
+            <field name="name">Repair Sheet</field>
+            <field name="model">valve.repair</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">valve_tracking.report_repair_sheet</field>
+            <field name="report_file">valve_tracking.report_repair_sheet</field>
+            <field name="paperformat_id" ref="valve_tracking.paperformat_lei_letter"/>
+            <!--<field name="paperformat_id" ref="base.paperformat_us"/>-->
+            <field name="print_report_name">object.valve_serial_id.name</field>
+            <field name="binding_model_id" ref="valve_tracking.model_valve_repair"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="report_valve_repair_sheet_ship" model="ir.actions.report">
+            <field name="name">Repair Sheet Shipment</field>
+            <field name="model">valve.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">valve_tracking.report_repair_sheet_ship</field>
+            <field name="report_file">valve_tracking.report_repair_sheet_ship</field>
+            <field name="paperformat_id" ref="valve_tracking.paperformat_lei_letter"/>
+            <!--<field name="paperformat_id" ref="base.paperformat_us"/>-->
+            <field name="print_report_name">object.valve_serial_id.name</field>
+            <field name="binding_model_id" eval="False"/>
+            <!--
+            <field name="binding_model_id" ref="valve_tracking.model_valve_move"/>
+            <field name="binding_type">report</field>
+            -->
+        </record>
+
     </data>
 </odoo>

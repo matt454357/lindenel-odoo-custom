@@ -36,11 +36,13 @@
                             <field name="product_tmpl_id"/>
                             <field name="repair_date"/>
                             <field name="partner_id"/>
+                            <field name="in_move_id" string="Receipt"/>
                         </group>
                         <group>
                             <field name="disassemble_emp_id"/>
                             <field name="cleaned_emp_id"/>
                             <field name="assemble_emp_id"/>
+                            <field name="test_emp_id"/>
                         </group>
                     </group>
                     <field name="repair_comments"/>
@@ -63,6 +65,22 @@
             <p class="o_view_nocontent_smiling_face">
                 Create a new Valve Repair
             </p>
+        </field>
+    </record>
+
+    <record id="valve_repair_search_view" model="ir.ui.view">
+        <field name="name">valve.repair.search</field>
+        <field name="model">valve.repair</field>
+        <field name="arch" type="xml">
+            <search string="Valve Repairs">
+                <field name="valve_serial_id" filter_domain="[('valve_serial_id','ilike',self)]" string="Serial Num"/>
+                <field name="assemble_emp_id" filter_domain="[('assemble_emp_id','ilike',self)]" string="Assembled By"/>
+                <field name="product_tmpl_id" filter_domain="[('product_tmpl_id','ilike',self)]" string="Valve"/>
+                <field name="name" filter_domain="[('name','ilike',self)]" string="Move Num"/>
+                <separator/>
+                <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="done" string="Done" domain="[('state','=','done')]"/>
+            </search>
         </field>
     </record>
 

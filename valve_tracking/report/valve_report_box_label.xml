@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_box_label_page">
+        <div class="row no-gutters" style="text-align:center; vertical-align:top; margin:0px 0px 0px 0px; height:200px;">
+            <div class="col-6" style="text-align:top;">
+                <div style="font-size: 50px; font-weight:bold; vertical-align:bottom;">
+                    Linden Elevator<br/>
+                </div>
+                <div style="font-size: 25px">
+                    3471 East 450 North<br/>
+                    Lewisville, ID 83431<br/>
+                    208-754-4884
+                </div>
+            </div>
+            <div class="col-6" style="vertical-align:top;">
+                <div style="font-size:75px; font-weight:bold;" t-field="o.valve_serial_id"/>
+                <!--<div style="font-family:'Code 128'; font-size:72px; margin:-18px -18px -28px -18px" t-field="o.track_code128"/>-->
+                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('Code128', o.valve_serial_id.name, 250, 40)"/>
+            </div>
+        </div>
+        <div class="row no-gutters" style="text-align:center; vertical-align:middle; margin:0px 0px 0px 0px; height:250px;">
+            <div class="col-12" style="height:100%; vertical-align:middle;">
+                <div style="font-size:75px; font-weight:bold; height:100%; vertical-align:middle;" t-field="o.product_tmpl_id"/>
+            </div>
+        </div>
+        <div class="row no-gutters" style="text-align:left; vertical-align:bottom; margin:0px 0px 0px 0px; font-size: 8px">
+            <div class="col-12">
+                <bold>Delivered To:</bold><br/>
+                <div t-field="o.qb_invoice_line_id.qb_invoice_id.ship_address"/>
+            </div>
+        </div>
+    </template>
+
+    <template id="report_box_label">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="page" style="position: relative;">
+                    <t t-call="valve_tracking.report_box_label_page">
+                        <t t-set="o" t-value="o"/>
+                    </t>
+                    <p style="page-break-before: always"> </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>
