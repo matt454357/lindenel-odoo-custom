@@ -381,6 +381,15 @@ cols = [
     "ShipDate",
     "PONumber",
     "ShipMethodRefFullName",
+    "ShipAddressAddr1",
+    "ShipAddressAddr2",
+    "ShipAddressAddr3",
+    "ShipAddressAddr4",
+    "ShipAddressAddr5",
+    "ShipAddressCity",
+    "ShipAddressState",
+    "ShipAddressPostalCode",
+    "ShipAddressCountry",
 ]
 cols_string = ", ".join(cols)
 sql = """
@@ -418,6 +427,29 @@ for invoice in invoices:
         vals['ship_method'] = qb_invoices[invoice.qb_ref]['ShipMethodRefFullName']
     if invoice.po_number != qb_invoices[invoice.qb_ref]['PONumber']:
         vals['po_number'] = qb_invoices[invoice.qb_ref]['PONumber']
+
+    if invoice.ship_addr1 != qb_invoices[invoice.qb_ref]['ShipAddressAddr1']:
+        vals['ship_addr1'] = qb_invoices[invoice.qb_ref]['ShipAddressAddr1']
+    if invoice.ship_addr2 != qb_invoices[invoice.qb_ref]['ShipAddressAddr2']:
+        vals['ship_addr2'] = qb_invoices[invoice.qb_ref]['ShipAddressAddr2']
+    if invoice.ship_addr3 != qb_invoices[invoice.qb_ref]['ShipAddressAddr3']:
+        vals['ship_addr3'] = qb_invoices[invoice.qb_ref]['ShipAddressAddr3']
+    if invoice.ship_addr4 != qb_invoices[invoice.qb_ref]['ShipAddressAddr4']:
+        vals['ship_addr4'] = qb_invoices[invoice.qb_ref]['ShipAddressAddr4']
+    if invoice.ship_addr5 != qb_invoices[invoice.qb_ref]['ShipAddressAddr5']:
+        vals['ship_addr5'] = qb_invoices[invoice.qb_ref]['ShipAddressAddr5']
+    if invoice.ship_city != qb_invoices[invoice.qb_ref]['ShipAddressCity']:
+        vals['ship_city'] = qb_invoices[invoice.qb_ref]['ShipAddressCity']
+    if invoice.ship_state != qb_invoices[invoice.qb_ref]['ShipAddressState']:
+        vals['ship_state'] = qb_invoices[invoice.qb_ref]['ShipAddressState']
+    if invoice.ship_zip != qb_invoices[invoice.qb_ref]['ShipAddressPostalCode']:
+        vals['ship_zip'] = qb_invoices[invoice.qb_ref]['ShipAddressPostalCode']
+    if invoice.ship_country != qb_invoices[invoice.qb_ref]['ShipAddressCountry']:
+        vals['ship_country'] = qb_invoices[invoice.qb_ref]['ShipAddressCountry']
+
+    if invoice.po_number != qb_invoices[invoice.qb_ref]['PONumber']:
+        vals['po_number'] = qb_invoices[invoice.qb_ref]['PONumber']
+
     if vals:
         invoice.write(vals)
 
@@ -601,3 +633,4 @@ def signal_handler(sig, frame):
     sys.exit("Exited early because of user interupt")
 
 signal.signal(signal.SIGINT, signal_handler)
+
