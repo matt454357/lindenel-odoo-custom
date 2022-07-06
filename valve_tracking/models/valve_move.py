@@ -168,8 +168,6 @@ class ValveMove(models.Model):
                 self.is_warranty = sent_move.is_warranty
 
     def action_confirm(self):
-        import pdb
-        pdb.set_trace()
         self.ensure_one()
         if self.valve_serial_id.repair_ids.filtered(lambda x: x.state == 'draft'):
             raise UserError("You need to complete the repair record for this valve before shipping it")
@@ -360,7 +358,7 @@ class ValveMove(models.Model):
         self.ensure_one()
         if self.move_type != 'out':
             raise UserError("This is only for printing valve shipments")
-        if not self.state == 'done':
+        if self.state == 'draft':
             raise UserError("Complete the shipment before printing the core ticket")
         return self.env.ref('valve_tracking.report_valve_3_core_tickets').report_action(self)
 

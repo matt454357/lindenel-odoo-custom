@@ -12,8 +12,9 @@ from datetime import datetime
 def qb_sync():
     def write_msg(msg):
         a.config(state="normal")
-        a.insert("end", msg)
+        a.insert("end", msg + os.linesep)
         a.config(state="disabled")
+        root.update()
 
     # clear the text box
     a.config(state="normal")
@@ -57,8 +58,8 @@ def qb_sync():
     # only continue if quickbooks is running
     write_msg("Starting Odoo Sync")
     if "QBW32.EXE" not in (p.name() for p in psutil.process_iter()):
-        write_msg("\nCan't continue without QuickBooks running")
-        write_msg("\n--------------------------- FAILED ---------------------------")
+        write_msg("Can't continue without QuickBooks running")
+        write_msg("--------------------------- FAILED ---------------------------")
         return
 
     # connect to QuickBooks via QODBC
@@ -622,7 +623,14 @@ def qb_sync():
     cur.close()
     cxn.close()
 
-    write_msg("\n----------------- DONE -----------------")
+    # write now() to the config file sync_time
+    print("Saving timestamp of successful sync")
+    parser.set('QB', 'sync_time', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    fp = open(conf_file_name, 'w')
+    parser.write(fp)
+    fp.close()
+
+    write_msg("----------------- DONE -----------------")
 
 
 
