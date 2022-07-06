@@ -109,7 +109,7 @@ class ValveRepair(models.Model):
         self.ensure_one()
         if self.state != 'done':
             raise UserError("You must complete the repair before printing the box label")
-        if not self.weight:
+        if not self.pack_weight:
             raise UserError("You must enter a weight before printing the box label")
         return self.env.ref('valve_tracking.report_valve_box_label').report_action(self)
 

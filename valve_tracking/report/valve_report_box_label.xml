@@ -26,7 +26,7 @@
         </div>
         <div class="row no-gutters" style="text-align:left; vertical-align:bottom; margin:0px 0px 0px 0px; font-size: 8px">
             <div class="col-12">
-                <bold>Weight:</bold><span t-field="o.weight"/> lbs
+                <bold>Weight:</bold><span t-field="o.pack_weight"/> lbs
             </div>
         </div>
     </template>
