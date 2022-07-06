@@ -347,13 +347,6 @@ class ValveMove(models.Model):
             repair.state = 'done'
         return self.env.ref('valve_tracking.report_valve_repair_sheet_ship').report_action(self)
 
-    def action_print_box_label(self):
-        self.ensure_one()
-        if self.move_type != 'out':
-            raise UserError("This is only for printing valve shipments")
-        self.state = 'done'
-        return self.env.ref('valve_tracking.report_valve_box_label').report_action(self)
-
     def action_print_core_ticket(self):
         self.ensure_one()
         if self.move_type != 'out':

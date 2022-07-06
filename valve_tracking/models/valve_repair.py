@@ -77,6 +77,10 @@ class ValveRepair(models.Model):
         string='Tested',
         copy=False,
     )
+    pack_weight = fields.Float(
+        string='Weight',
+        copy=False,
+    )
 
     qb_invoice_id = fields.Many2one(
         comodel_name='qb.invoice',
@@ -100,3 +104,24 @@ class ValveRepair(models.Model):
                 rec.state = 'done'
             else:
                 raise UserError("Can't complete repair record without employee assignments")
+
+    def action_print_box_label(self):
+        self.ensure_one()
+        if self.state != 'done':
+            raise UserError("You must complete the repair before printing the box label")
+        if not self.weight:
+            raise UserError("You must enter a weight before printing the box label")
+        return self.env.ref('valve_tracking.report_valve_box_label').report_action(self)
+
+    def action_set_to_draft(self):
+        self.ensure_one()
+        if self.state != 'cancel':
+            raise UserError("Repair must first be cancelled")
+        self.state = 'draft'
+        return True
+
+    def action_cancel(self):
+        self.ensure_one()
+        self.state = 'cancel'
+        return True
+

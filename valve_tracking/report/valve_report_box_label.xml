@@ -26,8 +26,7 @@
         </div>
         <div class="row no-gutters" style="text-align:left; vertical-align:bottom; margin:0px 0px 0px 0px; font-size: 8px">
             <div class="col-12">
-                <bold>Delivered To:</bold><br/>
-                <div t-field="o.qb_invoice_line_id.qb_invoice_id.ship_address"/>
+                <bold>Weight:</bold><span t-field="o.weight"/> lbs
             </div>
         </div>
     </template>

@@ -51,7 +51,7 @@
 
         <record id="report_valve_box_label" model="ir.actions.report">
             <field name="name">Box Label</field>
-            <field name="model">valve.move</field>
+            <field name="model">valve.repair</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">valve_tracking.report_box_label</field>
             <field name="report_file">valve_tracking.report_box_label</field>
