@@ -7,55 +7,9 @@
 
             </div>
         </div>
-        <div class="row" style="vertical-align:bottom; font-size:25px; height:63px;">
-            <div class="col-6" style="text-align: left;">
-                <span style="text-align: right; font-weight:bold;">Date:</span>
-                <span t-field="o.repair_out_id.repair_date" style="text-align:center; border-bottom-style:solid; border-width:1px;"/>
-            </div>
-            <div class="col-6" style="text-align: right;">
-                <span style="text-align: right; font-weight:bold;">Valve #:</span>
-                <span t-field="o.repair_out_id.valve_serial_id" style="text-align: center; border-bottom-style: solid; border-width: 1px;"/>
-                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('Code128', o.repair_out_id.valve_serial_id.name, 200, 25)" style="margin-right:-35px"/>
-            </div>
-        </div>
-        <div class="row" style="vertical-align:bottom; font-size:25px; height:63px;">
-            <div class="col-6" style="text-align: left;">
-                <span style="text-align: right; font-weight:bold;">Model:</span>
-                <span t-field="o.repair_out_id.product_tmpl_id" style="text-align:center; border-bottom-style:solid; border-width:1px;"/>
-            </div>
-            <div class="col-6" style="text-align: right;">
-                <span style="text-align: right; font-weight:bold;">MFG Serial:</span>
-                <span t-field="o.repair_out_id.valve_serial_id.mfg_serial" style="text-align: center; border-bottom-style: solid; border-width: 1px;"/>
-            </div>
-        </div>
-        <div class="row" style="vertical-align:bottom; font-size:25px; height:63px;">
-            <div class="col-3" style="text-align:left;">
-                <bold style="text-align: right; font-weight:bold;">Disassemble:</bold>
-                <span t-field="o.repair_out_id.disassemble_emp_id" style="text-align:center; border-bottom-style:solid; border-width:1px;"/>
-            </div>
-            <div class="col-3" style="text-align:center;">
-                <bold style="text-align: right; font-weight:bold;">Clean:</bold>
-                <span t-field="o.repair_out_id.cleaned_emp_id" style="text-align:center; border-bottom-style:solid; border-width:1px;"/>
-            </div>
-            <div class="col-3" style="text-align:center;">
-                <bold style="text-align:left; font-weight:bold;">Assemble:</bold>
-                <span t-field="o.repair_out_id.assemble_emp_id" style="text-align:center; border-bottom-style:solid; border-width:1px;"/>
-            </div>
-            <div class="col-3" style="text-align:right;">
-                <bold style="text-align:right; font-weight:bold;">Test:</bold>
-                <span t-field="o.repair_out_id.test_emp_id" style="text-align:center; border-bottom-style:solid; border-width:1px;"> </span>
-            </div>
-        </div>
-        <div class="row" style="vertical-align:bottom; font-size:25px; height:63px;">
+        <div class="row" style="vertical-align:bottom; height:452px;">
             <div class="col-12">
-                <span style="text-align: right; font-weight:bold;">Customer:</span>
-                <span t-field="o.repair_out_id.partner_id" style="text-align:left; border-bottom-style:solid; border-width:1px; width:100px;"/>
-            </div>
-        </div>
-        <div class="row" style="vertical-align:bottom; font-size:25px;">
-            <div class="col-12" style="text-align:left;">
-                <div style="font-weight:bold;">Repair Comments:</div>
-                <div t-field="o.repair_out_id.repair_comments" style="border-style:solid; border-width:1px; width:100%; height:200px"/>
+
             </div>
         </div>
 
@@ -86,9 +40,15 @@
             </div>
         </div>
         <div class="row" style="vertical-align:bottom; font-size:25px; height:63px;">
+            <div class="col-12" style="text-align: left;">
+                <span style="text-align:right; font-weight:bold;">Customer:</span>
+                <span t-field="o.partner_id" style="text-align:center; border-bottom-style:solid; border-width:1px;"/>
+            </div>
+        </div>
+        <div class="row" style="vertical-align:bottom; font-size:25px; height:63px;">
             <div class="col-12" style="text-align:left;">
                 <div style="font-weight:bold;">Shipment Comments:</div>
-                <div t-field="o.comments" style="border-style:solid; border-width:1px; width:100%; height:300px"/>
+                <div t-field="o.comments" style="border-style:solid; border-width:1px; width:100%; height:250px"/>
             </div>
         </div>
     </template>
