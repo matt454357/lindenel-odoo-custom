@@ -27,6 +27,7 @@
     "data": [
         "data/ir_sequence_data.xml",
         "data/product_category_data.xml",
+        "data/hr_department_data.xml",
         "security/ir.model.access.csv",
         "views/valve_move_views.xml",
         "views/valve_repair_views.xml",

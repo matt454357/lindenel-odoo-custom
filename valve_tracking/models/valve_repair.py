@@ -60,21 +60,25 @@ class ValveRepair(models.Model):
     disassemble_emp_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Disassembled',
+        domain=lambda self: [('department_id', '=', self.env.ref('valve_tracking.hr_dept_current').id)],
         copy=False,
     )
     cleaned_emp_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Cleaned',
+        domain=lambda self: [('department_id', '=', self.env.ref('valve_tracking.hr_dept_current').id)],
         copy=False,
     )
     assemble_emp_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Assembled',
+        domain=lambda self: [('department_id', '=', self.env.ref('valve_tracking.hr_dept_current').id)],
         copy=False,
     )
     test_emp_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Tested',
+        domain=lambda self: [('department_id', '=', self.env.ref('valve_tracking.hr_dept_current').id)],
         copy=False,
     )
     pack_weight = fields.Float(
