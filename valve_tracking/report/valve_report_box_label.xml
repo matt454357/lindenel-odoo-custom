@@ -24,7 +24,7 @@
                 <div style="font-size:75px; font-weight:bold; height:100%; vertical-align:middle;" t-field="o.product_tmpl_id"/>
             </div>
         </div>
-        <div class="row no-gutters" style="text-align:left; vertical-align:bottom; margin:0px 0px 0px 0px; font-size: 8px">
+        <div class="row no-gutters" style="text-align:left; vertical-align:bottom; margin:0px 0px 0px 0px; font-size: 16px">
             <div class="col-12">
                 <bold>Weight:</bold><span t-field="o.pack_weight"/> lbs
             </div>

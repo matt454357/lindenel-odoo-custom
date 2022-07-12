@@ -169,7 +169,7 @@ class ValveMove(models.Model):
 
     def action_confirm(self):
         self.ensure_one()
-        if self.valve_serial_id.repair_ids.filtered(lambda x: x.state == 'draft'):
+        if self.move_type == 'out' and self.valve_serial_id.repair_ids.filtered(lambda x: x.state == 'draft'):
             raise UserError("You need to complete the repair record for this valve before shipping it")
         if self.move_type == 'out' and not self.qb_invoice_line_id:
             raise UserError("You must enter an invoice line before shipping a valve")
@@ -304,32 +304,46 @@ class ValveMove(models.Model):
         if not self.core_track_num:
             return False
         sent_serial_num, sent_move_num = self.parse_core_track_num(self.core_track_num)
-        sent_move = self.search([('name', '=', sent_move_num)])
-        if len(sent_move) == 1:
-            self.move_return_ids = [(6, 0, [sent_move.id])]
-            sent_move.state = 'done'
-            return True
+        if sent_move_num:
+            sent_move = self.search([('name', '=', sent_move_num)])
+            if not sent_move:
+                invoice_id = self.env['qb.invoice'].search([('name', '=', sent_move_num)])
+                if invoice_id:
+                    sent_move = self.search([('qb_invoice_id', '=', invoice_id[0].id)])
+            if len(sent_move) == 1:
+                self.move_return_ids = [(6, 0, [sent_move.id])]
+                sent_move.state = 'done'
+                return True
         return False
 
     def action_get_repair(self):
         self.ensure_one()
         if self.move_type != 'in':
-            raise UserError("This is only for creating repairs from valve shipments")
+            raise UserError("This is only for creating repairs from valve receipts")
         action = self.env['ir.actions.act_window']._for_xml_id('valve_tracking.action_valve_repair')
         # action = self.env.ref('valve_tracking.valve_repair_action_view_form').sudo().read()[0]
         action['view_mode'] = 'form'
         action['views'] = []
+        if not self.repair_in_ids:
+            repairs = self.env['valve.repair'].search([
+                ('valve_serial_id', '=', self.valve_serial_id.id),
+                ('repair_date', '>=', self.move_date),
+                ('in_move_id', '=', False),
+            ])
+            if repairs:
+                repairs.update({'in_move_id': self.id})
+            else:
+                action['context'] = {
+                    'default_valve_serial_id': self.valve_serial_id.id,
+                    'default_partner_id': self.partner_id.id,
+                    'default_in_move_id': self.id,
+                }
+                return action
         if len(self.repair_in_ids) > 1:
             action['view_mode'] = 'tree'
             action['domain'] = [('in_move_id', 'in', self.repair_in_ids.ids)]
         elif len(self.repair_in_ids) == 1:
             action['res_id'] = self.repair_in_ids[0].id
-        else:
-            action['context'] = {
-                'default_valve_serial_id': self.valve_serial_id.id,
-                'default_partner_id': self.partner_id.id,
-                'default_in_move_id': self.id,
-            }
         return action
 
     def action_link_print_repair(self):
