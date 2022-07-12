@@ -146,7 +146,7 @@
                 <field name="product_tmpl_id" filter_domain="[('product_tmpl_id','ilike',self)]" string="Valve"/>
                 <field name="name" filter_domain="[('name','ilike',self)]" string="Move Num"/>
                 <separator/>
-                <filter name="cores" string="Cores" domain="[('move_type','=','c')]"/>
+                <filter name="cores" string="Cores" domain="[('type_code','=','c')]"/>
                 <separator/>
                 <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
                 <filter name="waiting" string="Waiting" domain="[('state','=','waiting')]"/>

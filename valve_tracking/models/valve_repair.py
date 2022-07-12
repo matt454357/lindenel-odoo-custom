@@ -102,6 +102,16 @@ class ValveRepair(models.Model):
         for rec in self:
             rec.name = "[%s] %s" % (rec.valve_serial_id.name, rec.repair_date.strftime("%Y-%m-%d"))
 
+    @api.constrains('valve_serial_id', 'state')
+    def _constrain_serial_state(self):
+        other_open_repairs = self.search([
+            ('id', 'not in', self.ids),
+            ('valve_serial_id', 'in', self.mapped('valve_serial_id').ids),
+            ('state', 'not in', ['done', 'cancel']),
+        ])
+        if other_open_repairs:
+            raise UserError("You are not allowed to have multiple repairs open for the same valve")
+
     def action_done(self):
         for rec in self:
             if all([rec.disassemble_emp_id, rec.cleaned_emp_id, rec.assemble_emp_id, rec.test_emp_id]):
