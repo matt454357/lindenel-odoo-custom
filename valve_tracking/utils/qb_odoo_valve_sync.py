@@ -1,3 +1,5 @@
+#!/usr/bin/env/ python
+
 from tkinter import *
 import sys
 import signal
@@ -136,10 +138,9 @@ def qb_sync():
         if partner.state_id.code != qb_customers[partner.ref]['BillAddressState']:
             state_id = state_obj.search([('code', '=', qb_customers[partner.ref]['BillAddressState'])])
             vals['state_id'] = state_id or False
-        if partner.name != qb_customers[partner.ref]['BillAddressCountry']:
-            vals['name'] = qb_customers[partner.ref]['BillAddressCountry']
-            country_id = country_obj.search([('name', '=', qb_customers[partner.ref]['BillAddressCountry'])])
-            vals['country_id'] = country_id or False
+        if partner.country_id.code != qb_customers[partner.ref]['BillAddressCountry']:
+           country_id = country_obj.search([('name', '=', qb_customers[partner.ref]['BillAddressCountry'])])
+           vals['country_id'] = country_id or False
         if partner.email != qb_customers[partner.ref]['Email']:
             vals['email'] = qb_customers[partner.ref]['Email']
         if partner.phone != qb_customers[partner.ref]['Phone']:
@@ -311,7 +312,7 @@ def qb_sync():
         if tmpl.name != qb_templates[tmpl.qb_ref]['FullName']:
             vals['name'] = qb_templates[tmpl.qb_ref]['FullName']
         if tmpl.list_price != qb_templates[tmpl.qb_ref]['SalesOrPurchasePrice']:
-            vals['list_price'] = qb_templates[tmpl.qb_ref]['SalesOrPurchasePrice']
+            vals['list_price'] = float(qb_templates[tmpl.qb_ref]['SalesOrPurchasePrice'])
         if tmpl.description != qb_templates[tmpl.qb_ref]['SalesOrPurchaseDesc']:
             vals['description'] = qb_templates[tmpl.qb_ref]['SalesOrPurchaseDesc']
         if tmpl.categ_id.id != new_cat_id:
@@ -623,12 +624,14 @@ def qb_sync():
     cur.close()
     cxn.close()
 
+
     # write now() to the config file sync_time
-    print("Saving timestamp of successful sync")
+    write_msg("Saving timestamp of successful sync")
     parser.set('QB', 'sync_time', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     fp = open(conf_file_name, 'w')
     parser.write(fp)
     fp.close()
+
 
     write_msg("----------------- DONE -----------------")
 
