@@ -26,7 +26,7 @@
                             t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
                     </div>
                 </div>
-                <div class="row no-gutters" style="text-align:left; vertical-align:top; margin-top:100px;">
+                <div class="row no-gutters" style="text-align:left; vertical-align:top; margin-top:100px; margin-left:100px; font-size:20px;">
                     <div class="col-12">
                         <bold>Delivered To:</bold><br/>
                         <div t-field="o.qb_invoice_line_id.qb_invoice_id.ship_address"/>

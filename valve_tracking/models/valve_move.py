@@ -53,7 +53,7 @@ class ValveMove(models.Model):
     move_date = fields.Date(
         string="Move Date",
         required=True,
-        default=fields.Date.today(),
+        default=lambda self: fields.Date.today(),
         copy=False,
     )
     valve_serial_id = fields.Many2one(
