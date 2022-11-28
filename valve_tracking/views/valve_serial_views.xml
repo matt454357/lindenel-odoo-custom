@@ -58,12 +58,24 @@
         </field>
     </record>
 
+    <record id="valve_serial_search_view" model="ir.ui.view">
+        <field name="name">valve.serial.search</field>
+        <field name="model">valve.serial</field>
+        <field name="arch" type="xml">
+            <search string="Valve Serials">
+                <field name="name"/>
+                <field name="mfg_serial"/>
+            </search>
+        </field>
+    </record>
+
     <record id="action_valve_serial" model="ir.actions.act_window">
         <field name="name">Valve Serials</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">valve.serial</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="context">{}</field>
+        <field name="search_view_id" ref="valve_tracking.valve_serial_search_view"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create a new Valve Serial

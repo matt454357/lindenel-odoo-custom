@@ -4,9 +4,9 @@
 
         <menuitem id="valve_tracking_menu" name="Valve Tracking" groups="" sequence="45" web_icon="valve_tracking,static/description/icon.png">
             <menuitem id="valve_tracking_operations_menu" name="Operations" sequence="10">
-                <menuitem id="valve_move_in_menu" name="Valve Receipts" action="valve_tracking.action_valve_move_in" sequence="100"/>
+                <menuitem id="valve_move_in_menu" name="Check In Valve" action="valve_tracking.action_valve_move_in" sequence="100"/>
                 <menuitem id="valve_move_out_menu" name="Valve Shipments" action="valve_tracking.action_valve_move_out" sequence="110"/>
-                <menuitem id="valve_repair_menu" name="Valve Repairs" action="valve_tracking.action_valve_repair" sequence="120"/>
+                <menuitem id="valve_repair_menu" name="Valve Repair Records" action="valve_tracking.action_valve_repair" sequence="120"/>
                 <menuitem id="wizard_valve_move_in_core_menu" name="Scan Core" action="valve_tracking.action_wizard_valve_move_in_core" sequence="130"/>
                 <!--<menuitem id="wizard_valve_move_in_scan_menu" name="Scan Receipts" action="valve_tracking.action_wizard_valve_move_in_scan" sequence="140"/>-->
             </menuitem>

@@ -28,7 +28,7 @@
                 <header>
                     <button name="action_done" type="object" string="Complete" states="draft" class="oe_stat_button"/>
                     <button name="action_set_to_draft" type="object" string="Set To Draft" states="cancel" class="oe_stat_button"/>
-                    <button name="action_print_box_label" type="object" string="Print Box Label" states="done" class="oe_stat_button"/>
+                    <button name="action_print_box_label" type="object" string="Print Green Sheet" states="done" class="oe_stat_button"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -38,16 +38,18 @@
                             <field name="product_tmpl_id"/>
                             <field name="repair_date"/>
                             <field name="partner_id"/>
-                            <field name="in_move_id" string="Receipt"/>
+                            <field name="in_move_id" string="Check-In"/>
                         </group>
                         <group>
                             <field name="disassemble_emp_id"/>
                             <field name="cleaned_emp_id"/>
                             <field name="assemble_emp_id"/>
                             <field name="test_emp_id"/>
+                            <field name="pack_emp_id"/>
                             <field name="pack_weight"/>
                         </group>
                     </group>
+                    <h3>Notes:</h3>
                     <field name="repair_comments"/>
                 </sheet>
                 <div class="oe_chatter">

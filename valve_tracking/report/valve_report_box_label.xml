@@ -25,8 +25,11 @@
             </div>
         </div>
         <div class="row no-gutters" style="text-align:left; vertical-align:bottom; margin:0px 0px 0px 0px; font-size: 16px">
-            <div class="col-12">
-                <bold>Weight:</bold><span t-field="o.pack_weight"/> lbs
+            <div class="col-4" style="text-align:left;">
+                <bold>Weight:</bold> <span t-field="o.pack_weight"/> lbs <t t-if="o.pack_emp_id">(<span t-field="o.pack_emp_id.name"/>)</t>
+            </div>
+            <div class="col-8" style="text-align:right;">
+                <span t-field="o.partner_id.name"/>
             </div>
         </div>
     </template>

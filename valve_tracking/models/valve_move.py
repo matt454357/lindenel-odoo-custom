@@ -337,6 +337,7 @@ class ValveMove(models.Model):
                     'default_valve_serial_id': self.valve_serial_id.id,
                     'default_partner_id': self.partner_id.id,
                     'default_in_move_id': self.id,
+                    # 'default_repair_comments': self.partner_id.name,
                 }
                 return action
         if len(self.repair_in_ids) > 1:

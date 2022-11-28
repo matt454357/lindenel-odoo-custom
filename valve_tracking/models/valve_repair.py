@@ -81,6 +81,12 @@ class ValveRepair(models.Model):
         domain=lambda self: [('department_id', '=', self.env.ref('valve_tracking.hr_dept_current').id)],
         copy=False,
     )
+    pack_emp_id = fields.Many2one(
+        comodel_name='hr.employee',
+        string='Packaged',
+        domain=lambda self: [('department_id', '=', self.env.ref('valve_tracking.hr_dept_current').id)],
+        copy=False,
+    )
     pack_weight = fields.Float(
         string='Weight',
         copy=False,
@@ -112,9 +118,15 @@ class ValveRepair(models.Model):
         if other_open_repairs:
             raise UserError("You are not allowed to have multiple repairs open for the same valve")
 
+    # TODO: convince the users they don't need/want this
+    # @api.onchange('partner_id')
+    # def _onchange_partner_id(self):
+    #     if self.partner_id and not self.repair_comments:
+    #         self.repair_comments = self.partner_id.name
+
     def action_done(self):
         for rec in self:
-            if all([rec.disassemble_emp_id, rec.cleaned_emp_id, rec.assemble_emp_id, rec.test_emp_id]):
+            if all([rec.disassemble_emp_id, rec.cleaned_emp_id, rec.assemble_emp_id, rec.test_emp_id, rec.pack_emp_id]):
                 rec.state = 'done'
             else:
                 raise UserError("Can't complete repair record without employee assignments")
