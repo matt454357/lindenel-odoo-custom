@@ -5,7 +5,8 @@
         <record id="seq_lei_serial" model="ir.sequence">
             <field name="name">LEI Serial</field>
             <field name="code">lei.serial</field>
-            <field name="prefix">%(y)s</field>
+            <field name="use_date_range" eval="True"/>
+            <field name="prefix">%(range_y)s</field>
             <field eval="500" name="number_next"/>
             <field eval="1" name="number_increment"/>
             <field eval="4" name="padding"/>

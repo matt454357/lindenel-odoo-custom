@@ -27,19 +27,24 @@ def qb_sync():
     dir_name = os.path.dirname(__file__)
     conf_file_name = os.path.join(dir_name, 'qodbc_push_odoo.ini')
     parser = configparser.RawConfigParser()
-    parser.read(conf_file_name)
 
-    # get odoo config values
-    host = parser['ODOO']['host']
-    port = parser['ODOO']['port']
-    protocol = parser['ODOO']['protocol']
-    db = parser['ODOO']['db']
-    username = parser['ODOO']['username']
-    password = parser['ODOO']['password']
-
-    # get quickbooks config values
-    dsn = parser['QB']['dsn']
-    sync_time = parser['QB']['sync_time']
+    try:
+        parser.read(conf_file_name)
+        # get odoo config values
+        host = parser['ODOO']['host']
+        port = parser['ODOO']['port']
+        protocol = parser['ODOO']['protocol']
+        db = parser['ODOO']['db']
+        username = parser['ODOO']['username']
+        password = parser['ODOO']['password']
+        # get quickbooks config values
+        dsn = parser['QB']['dsn']
+        sync_time = parser['QB']['sync_time']
+    except:
+        write_msg("Failed to read config file: qodbc_push_odoo.ini")
+        write_msg("Copy sample.ini to qodbc_push_odoo.ini and modify appropriately")
+        write_msg("--------------------------- FAILED ----------------------------")
+        return
     sync_dt = datetime.strptime(sync_time, "%Y-%m-%d %H:%M:%S")
 
     # connect to Odoo via odoorpc
