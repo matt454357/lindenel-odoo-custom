@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
+from datetime import datetime
 
 
 class ValveRepair(models.Model):
@@ -34,7 +35,7 @@ class ValveRepair(models.Model):
     )
     repair_date = fields.Date(
         string='Repair Date',
-        default=fields.Date.today(),
+        default=lambda x: datetime.today().date(),
         copy=False,
     )
     product_tmpl_id = fields.Many2one(
