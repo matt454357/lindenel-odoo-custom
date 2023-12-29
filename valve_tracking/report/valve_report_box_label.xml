@@ -29,7 +29,7 @@
                 <bold>Weight:</bold> <span t-field="o.pack_weight"/> lbs <t t-if="o.pack_emp_id">(<span t-field="o.pack_emp_id.name"/>)</t>
             </div>
             <div class="col-8" style="text-align:right;">
-                <span t-field="o.partner_id.name"/>
+                <!--<span t-field="o.partner_id.name"/>-->
             </div>
         </div>
     </template>
