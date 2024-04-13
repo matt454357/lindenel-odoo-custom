@@ -64,7 +64,7 @@ def qb_sync():
 
     # only continue if quickbooks is running
     write_msg("Starting Odoo Sync")
-    if "QBW32.EXE" not in (p.name() for p in psutil.process_iter()):
+    if "QBW.EXE" not in (p.name() for p in psutil.process_iter()):
         write_msg("Can't continue without QuickBooks running")
         write_msg("--------------------------- FAILED ---------------------------")
         return
