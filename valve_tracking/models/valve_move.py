@@ -109,6 +109,12 @@ class ValveMove(models.Model):
         store=True,
         copy=False,
     )
+    ship_method = fields.Char(
+        related='qb_invoice_line_id.qb_invoice_id.ship_method',
+        string="Shipping",
+        store=True,
+        copy=False,
+    )
     core_track_num = fields.Char(
         string="Core Track Num",
         copy=False,

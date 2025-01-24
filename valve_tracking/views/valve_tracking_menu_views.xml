@@ -8,6 +8,7 @@
                 <menuitem id="valve_move_out_menu" name="Valve Shipments" action="valve_tracking.action_valve_move_out" sequence="110"/>
                 <menuitem id="valve_repair_menu" name="Valve Repair Records" action="valve_tracking.action_valve_repair" sequence="120"/>
                 <menuitem id="wizard_valve_move_in_core_menu" name="Scan Core" action="valve_tracking.action_wizard_valve_move_in_core" sequence="130"/>
+                <menuitem id="todays_priorities_menu" name="Priorities" action="valve_tracking.action_valve_move_out_priority" sequence="140"/>
                 <!--<menuitem id="wizard_valve_move_in_scan_menu" name="Scan Receipts" action="valve_tracking.action_wizard_valve_move_in_scan" sequence="140"/>-->
             </menuitem>
             <menuitem id="valve_tracking_master_data_menu" name="Master Data" sequence="20">
