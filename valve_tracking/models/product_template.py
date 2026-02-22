@@ -12,4 +12,9 @@ class ProductTemplate(models.Model):
     qb_ref = fields.Char(
         string='QB Reference',
         index=True,
+        readonly=True,
+    )
+
+    info_url = fields.Char(
+        string="Info URL"
     )

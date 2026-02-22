@@ -33,6 +33,7 @@
         "views/valve_repair_views.xml",
         "views/valve_serial_views.xml",
         "views/qb_invoice_views.xml",
+        "views/product_template_views.xml",
         # "wizards/wizard_valve_move_in_scan_views.xml",
         "wizards/wizard_valve_move_in_core_views.xml",
         "views/valve_tracking_menu_views.xml",
