@@ -65,27 +65,28 @@ class ValveSerial(models.Model):
         readonly=True,
     )
 
-    @api.model
-    def create(self, vals):
-        if vals.get('get_next_serial'):
-            vals['name'] = self.env['ir.sequence'].next_by_code('lei.serial')
-            vals['get_next_serial'] = False
-        else:
-            if vals['name']:
-                # remove all whitespace
-                vals['name'] = re.sub(r'\s+', '', vals['name'])
-        if vals.get('get_dummy_mfg_serial'):
-            vals['mfg_serial'] = self.env['ir.sequence'].next_by_code('na.mfg.serial')
-            vals['get_dummy_mfg_serial'] = False
-        else:
-            if vals['mfg_serial']:
-                # remove leading and trailer whitespace
-                vals['mfg_serial'] = re.sub(r'^\s+|\s+$', '', vals['mfg_serial'])
-                # reduce internal whitespace to a single space character
-                vals['mfg_serial'] = re.sub(r'\s+', ' ', vals['mfg_serial'])
-                # force upper case
-                vals['mfg_serial'] = vals['mfg_serial'].upper()
-        res = super(ValveSerial, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('get_next_serial'):
+                vals['name'] = self.env['ir.sequence'].next_by_code('lei.serial')
+                vals['get_next_serial'] = False
+            else:
+                if vals['name']:
+                    # remove all whitespace
+                    vals['name'] = re.sub(r'\s+', '', vals['name'])
+            if vals.get('get_dummy_mfg_serial'):
+                vals['mfg_serial'] = self.env['ir.sequence'].next_by_code('na.mfg.serial')
+                vals['get_dummy_mfg_serial'] = False
+            else:
+                if vals['mfg_serial']:
+                    # remove leading and trailer whitespace
+                    vals['mfg_serial'] = re.sub(r'^\s+|\s+$', '', vals['mfg_serial'])
+                    # reduce internal whitespace to a single space character
+                    vals['mfg_serial'] = re.sub(r'\s+', ' ', vals['mfg_serial'])
+                    # force upper case
+                    vals['mfg_serial'] = vals['mfg_serial'].upper()
+        res = super(ValveSerial, self).create(vals_list)
         return res
 
     @api.constrains('name')
