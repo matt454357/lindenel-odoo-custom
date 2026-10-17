@@ -1,7 +1,7 @@
 {
     'license': 'LGPL-3',
     "name": "Barcode Font",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "author": "Asphalt Zipper",
     "category": "Extra Tools",
     "summary": "Encode strings for barcode fonts",

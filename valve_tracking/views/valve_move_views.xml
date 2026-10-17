@@ -2,11 +2,11 @@
 <odoo>
 
     <record id="valve_move_in_tree_view" model="ir.ui.view">
-        <field name="name">valve.move.in.tree</field>
+        <field name="name">valve.move.in.list</field>
         <field name="model">valve.move</field>
         <field name="priority">100</field>
         <field name="arch" type="xml">
-            <tree string="Valve Receipts">
+            <list string="Valve Receipts">
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="move_type"/>
@@ -17,7 +17,7 @@
                 <field name="product_tmpl_id"/>
                 <field name="core_track_num"/>
                 <field name="state"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -59,20 +59,17 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
-                    <field name="message_ids" widget="mail_thread"/>
-                </div>
+                <chatter/>
             </form>
         </field>
     </record>
 
     <record id="valve_move_out_tree_view" model="ir.ui.view">
-        <field name="name">valve.move.out.tree</field>
+        <field name="name">valve.move.out.list</field>
         <field name="model">valve.move</field>
         <field name="priority">100</field>
         <field name="arch" type="xml">
-            <tree string="Valve Shipments">
+            <list string="Valve Shipments">
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="move_type"/>
@@ -84,7 +81,7 @@
                 <field name="qb_invoice_id"/>
                 <field name="core_track_num"/>
                 <field name="state"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -127,10 +124,7 @@
                     <field name="comments"/>
                     <field name="move_return_ids"/>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
-                    <field name="message_ids" widget="mail_thread"/>
-                </div>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -166,11 +160,11 @@
     </record>
 
     <record id="valve_move_priority_tree_view" model="ir.ui.view">
-        <field name="name">valve.move.priority.tree</field>
+        <field name="name">valve.move.priority.list</field>
         <field name="model">valve.move</field>
         <field name="priority">120</field>
         <field name="arch" type="xml">
-            <tree string="Priorities" default_order="move_date asc, ship_method desc">
+            <list string="Priorities" default_order="move_date asc, ship_method desc">
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="move_type" invisible="1"/>
@@ -183,7 +177,7 @@
                 <field name="state" invisible="1"/>
                 <field name="ship_method"/>
                 <field name="move_date"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -191,7 +185,7 @@
         <field name="name">Valve Receipts</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">valve.move</field>
-        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="context">{'default_move_type': 'in'}</field>
         <field name="domain">[('move_type', '=', 'in')]</field>
         <field name="help" type="html">
@@ -202,7 +196,7 @@
     </record>
     <record id="valve_move_in_action_view_tree" model="ir.actions.act_window.view">
         <field name="sequence" eval="1"/>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">list</field>
         <field name="view_id" ref="valve_tracking.valve_move_in_tree_view"/>
         <field name="act_window_id" ref="valve_tracking.action_valve_move_in"/>
     </record>
@@ -217,7 +211,7 @@
         <field name="name">Valve Shipments</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">valve.move</field>
-        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="context">{'default_move_type': 'out'}</field>
         <field name="domain">[('move_type', '=', 'out')]</field>
         <field name="search_view_id" ref="valve_tracking.valve_move_out_search_view"/>
@@ -229,7 +223,7 @@
     </record>
     <record id="valve_move_out_action_view_tree" model="ir.actions.act_window.view">
         <field name="sequence" eval="1"/>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">list</field>
         <field name="view_id" ref="valve_tracking.valve_move_out_tree_view"/>
         <field name="act_window_id" ref="valve_tracking.action_valve_move_out"/>
     </record>
@@ -244,7 +238,7 @@
         <field name="name">Priorities</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">valve.move</field>
-        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="context">{'search_default_priorities': 1}</field>
         <field name="domain">[('move_type', '=', 'out')]</field>
         <field name="search_view_id" ref="valve_tracking.valve_move_out_search_view"/>
@@ -256,7 +250,7 @@
     </record>
     <record id="valve_move_priority_action_view_tree" model="ir.actions.act_window.view">
         <field name="sequence" eval="1"/>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">list</field>
         <field name="view_id" ref="valve_tracking.valve_move_priority_tree_view"/>
         <field name="act_window_id" ref="valve_tracking.action_valve_move_out_priority"/>
     </record>

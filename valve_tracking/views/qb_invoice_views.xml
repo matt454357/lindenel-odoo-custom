@@ -2,32 +2,32 @@
 <odoo>
 
     <record id="qb_invoice_line_tree_view" model="ir.ui.view">
-        <field name="name">qb.invoice.line.tree</field>
+        <field name="name">qb.invoice.line.list</field>
         <field name="model">qb.invoice.line</field>
         <field name="priority">100</field>
         <field name="arch" type="xml">
-            <tree string="QB Invoice Line">
+            <list string="QB Invoice Line">
                 <field name="qb_invoice_id"/>
                 <field name="partner_id"/>
                 <field name="ship_date"/>
                 <field name="product_tmpl_id"/>
-            </tree>
+            </list>
         </field>
     </record>
 
     <record id="qb_invoice_tree_view" model="ir.ui.view">
-        <field name="name">qb.invoice.tree</field>
+        <field name="name">qb.invoice.list</field>
         <field name="model">qb.invoice</field>
         <field name="priority">100</field>
         <field name="arch" type="xml">
-            <tree string="QB Invoice">
+            <list string="QB Invoice">
                 <field name="name"/>
                 <field name="ship_date"/>
                 <field name="is_paid"/>
                 <field name="partner_id"/>
                 <field name="ship_method"/>
                 <field name="po_number"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -69,12 +69,12 @@
                         </group>
                     </group>
                     <field name="qb_invoice_line_ids">
-                        <tree>
+                        <list>
                             <field name="qb_invoice_id"/>
                             <field name="product_tmpl_id"/>
                             <field name="description"/>
                             <field name="quantity"/>
-                        </tree>
+                        </list>
                         <form>
                             <group>
                                 <group>
@@ -92,10 +92,7 @@
                         </form>
                     </field>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
-                    <field name="message_ids" widget="mail_thread"/>
-                </div>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -116,7 +113,7 @@
         <field name="name">QB Invoices</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">qb.invoice</field>
-        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="context">{}</field>
         <field name="search_view_id" ref="valve_tracking.qb_invoice_search_view"/>
         <field name="help" type="html">
@@ -128,7 +125,7 @@
 
     <record id="qb_invoice_action_view_tree" model="ir.actions.act_window.view">
         <field name="sequence" eval="1"/>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">list</field>
         <field name="view_id" ref="valve_tracking.qb_invoice_tree_view"/>
         <field name="act_window_id" ref="valve_tracking.action_qb_invoice"/>
     </record>

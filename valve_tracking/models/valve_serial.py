@@ -16,6 +16,7 @@ class ValveSerial(models.Model):
     name = fields.Char(
         string='LEI Serial',
         # required=True,
+        readonly=False,
         copy=False,
         index=True,
         tracking=True,
@@ -29,6 +30,7 @@ class ValveSerial(models.Model):
     mfg_serial = fields.Char(
         string='MFG Serial',
         # required=True,
+        readonly=False,
         copy=False,
         index=True,
         tracking=True,
@@ -79,7 +81,7 @@ class ValveSerial(models.Model):
                 vals['mfg_serial'] = self.env['ir.sequence'].next_by_code('na.mfg.serial')
                 vals['get_dummy_mfg_serial'] = False
             else:
-                if vals['mfg_serial']:
+                if vals.get('mfg_serial'):
                     # remove leading and trailer whitespace
                     vals['mfg_serial'] = re.sub(r'^\s+|\s+$', '', vals['mfg_serial'])
                     # reduce internal whitespace to a single space character
