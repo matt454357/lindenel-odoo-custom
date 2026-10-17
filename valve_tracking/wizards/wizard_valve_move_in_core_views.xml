@@ -8,11 +8,11 @@
             <form string="Scan Core">
                 <group>
                     <field name="core_track_num"/>
-                    <field name="core_move_id" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
-                    <field name="move_type" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
-                    <field name="valve_serial_id" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
-                    <field name="type_code" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
-                    <field name="partner_id" attrs="{'invisible':[('core_move_id', '=', False)]}"/>
+                    <field name="core_move_id" invisible="[('core_move_id', '=', False)]"/>
+                    <field name="move_type" invisible="[('core_move_id', '=', False)]"/>
+                    <field name="valve_serial_id" invisible="[('core_move_id', '=', False)]"/>
+                    <field name="type_code" invisible="[('core_move_id', '=', False)]"/>
+                    <field name="partner_id" invisible="[('core_move_id', '=', False)]"/>
                 </group>
                 <footer>
                     <button name="action_complete" type="object" string="Complete" class="btn-primary"/>

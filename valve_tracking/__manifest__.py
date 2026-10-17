@@ -1,29 +1,24 @@
-# Copyright 2022 Matt Taylor
+# Copyright 2022-2026 Matt Taylor
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Valve Exchange Tracking",
     "summary": "Track exchanged products without the management overhead of inventory or invoices.",
-    "version": "16.0.1.0.0",
+    "version": "17.0.1.0.0",
     "development_status": "Beta",
     "author": "Matt Taylor",
     "website": "https://github.com/matt454357/lindenel-odoo-custom",
-    'category': 'Invoices & Payments',
+    "category": "Invoices & Payments",
     "depends": [
-        'base',
-        'product',
-        'hr',
-        'mail',
-        'web_m2x_options',
-        'barcodes',
-        'barcode_font',
+        "base",
+        "product",
+        "hr",
+        "mail",
+        "web_m2x_options",
+        "barcodes",
+        "barcode_font",
     ],
     "license": "AGPL-3",
-    'assets': {
-        'web.assets_backend': [
-            '/valve_tracking/static/src/js/move_barcode_handler.js',
-        ]
-    },
     "data": [
         "data/ir_sequence_data.xml",
         "data/product_category_data.xml",
@@ -34,7 +29,6 @@
         "views/valve_serial_views.xml",
         "views/qb_invoice_views.xml",
         "views/product_template_views.xml",
-        # "wizards/wizard_valve_move_in_scan_views.xml",
         "wizards/wizard_valve_move_in_core_views.xml",
         "views/valve_tracking_menu_views.xml",
         "report/valve_report_core_tickets.xml",

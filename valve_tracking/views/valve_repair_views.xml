@@ -26,9 +26,9 @@
         <field name="arch" type="xml">
             <form string="Valve Repair">
                 <header>
-                    <button name="action_done" type="object" string="Complete" states="draft" class="oe_stat_button"/>
-                    <button name="action_set_to_draft" type="object" string="Set To Draft" states="cancel" class="oe_stat_button"/>
-                    <button name="action_print_box_label" type="object" string="Print Green Sheet" states="done" class="oe_stat_button"/>
+                    <button name="action_done" type="object" string="Complete" invisible="state not in 'draft'" class="oe_stat_button"/>
+                    <button name="action_set_to_draft" type="object" string="Set To Draft" invisible="state not in 'cancel'" class="oe_stat_button"/>
+                    <button name="action_print_box_label" type="object" string="Print Green Sheet" invisible="state not in 'done'" class="oe_stat_button"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
