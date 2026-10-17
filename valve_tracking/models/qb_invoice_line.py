@@ -4,9 +4,11 @@ from odoo import models, fields, api
 class QbInvoice(models.Model):
     _name = 'qb.invoice.line'
     _description = 'QuickBooks Invoice Line'
-    _sql_constraints = [
-        ('qb_ref_uniq', 'unique (qb_ref)', "InvoiceLineTxnLineID must be unique"),
-    ]
+
+    _qb_ref_uniq = models.Constraint(
+        'unique (qb_ref)',
+        'QB InvoiceLineTxnLineID must be unique',
+    )
 
     name = fields.Char(
         string='Name',

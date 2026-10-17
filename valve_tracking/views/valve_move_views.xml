@@ -30,8 +30,8 @@
                 <header>
                     <button name="action_confirm" type="object" string="Complete" invisible="state not in ('draft', 'waiting')" class="oe_stat_button"/>
                     <button name="action_set_to_draft" type="object" string="Set To Draft" invisible="state not in 'cancel'" class="oe_stat_button"/>
-                    <button name="action_get_repair" type="object" string="Get Repair" class="oe_highlight" invisible="[('repair_in_ids', '!=', False)]"/>
-                    <button name="action_get_repair" type="object" string="Get Repair" class="oe_stat_button" invisible="[('repair_in_ids', '=', False)]"/>
+                    <button name="action_get_repair" type="object" string="Get Repair" class="oe_highlight" invisible="repair_in_ids != False"/>
+                    <button name="action_get_repair" type="object" string="Get Repair" class="oe_stat_button" invisible="repair_in_ids == False"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -92,8 +92,8 @@
         <field name="arch" type="xml">
             <form string="Valve Shipments">
                 <header>
-                    <button name="action_link_print_repair" type="object" string="Print Repair" class="oe_highlight" invisible="[('repair_out_id', '!=', False)]"/>
-                    <button name="action_link_print_repair" type="object" string="Print Repair" class="oe_stat_button" invisible="[('repair_out_id', '=', False)]"/>
+                    <button name="action_link_print_repair" type="object" string="Print Repair" class="oe_highlight" invisible="repair_out_id != False"/>
+                    <button name="action_link_print_repair" type="object" string="Print Repair" class="oe_stat_button" invisible="repair_out_id == False"/>
                     <button name="action_confirm" type="object" string="Complete" class="oe_highlight" invisible="state not in ('draft', 'waiting') or not repair_out_id"/>
                     <button name="action_print_core_ticket" type="object" string="Print Core Tickets" invisible="state not in ('waiting', 'done')" class="oe_stat_button"/>
                     <button name="action_set_to_draft" type="object" string="Set To Draft" invisible="state not in 'cancel'" class="oe_stat_button"/>
@@ -152,9 +152,8 @@
                     domain="[('state', '=', 'draft'), ('move_date','&gt;=', (context_today() + relativedelta(days=-14)).strftime('%Y-%m-%d'))]"
                     help="Draft shipments from the last 2 weeks"
                 />
-                <group expand="0" string="Group By">
-                    <filter string="Move Date" name="group_move_date_day" context="{'group_by': 'move_date:day'}"/>
-                </group>
+                <separator/>
+                <filter string="Move Date" name="group_move_date_day" context="{'group_by': 'move_date:day'}"/>
             </search>
         </field>
     </record>

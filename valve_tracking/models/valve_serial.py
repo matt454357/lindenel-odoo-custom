@@ -8,10 +8,16 @@ class ValveSerial(models.Model):
     _description = 'Valve Serial'
     _inherit = ['mail.thread']
     _order = 'name desc'
-    _sql_constraints = [
-        ('name_uniq', 'unique (name)', "LEI Serial must be unique"),
-        ('mfg_serial_uniq', 'unique (mfg_serial)', "MFG Serial must be unique"),
-    ]
+
+    _name_uniq = models.Constraint(
+        'unique(name)',
+        'LEI Serial must be unique',
+    )
+
+    _mfg_serial_uniq = models.Constraint(
+        'unique(mfg_serial)',
+        'MFG Serial must be unique',
+    )
 
     name = fields.Char(
         string='LEI Serial',

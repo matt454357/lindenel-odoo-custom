@@ -26,13 +26,13 @@
                         <!--<field name="name"/>-->
                         <label for="name" class="oe_inline"/>
                         <div class="o_row">
-                            <field name="name" required="[('get_next_serial', '=', False)]" readonly="[('get_next_serial', '=', True)]"/>
+                            <field name="name" required="get_next_serial == False" readonly="get_next_serial == True"/>
                             <div class="oe_edit_only"><field name="get_next_serial"/>Get Next</div>
                         </div>
                         <!--<field name="mfg_serial"/>-->
                         <label for="mfg_serial" class="oe_inline"/>
                         <div class="o_row">
-                            <field name="mfg_serial" required="[('get_dummy_mfg_serial', '=', False)]" readonly="[('get_dummy_mfg_serial', '=', True)]"/>
+                            <field name="mfg_serial" required="get_dummy_mfg_serial == False" readonly="get_dummy_mfg_serial == True"/>
                             <div class="oe_edit_only"><field name="get_dummy_mfg_serial"/>Get Dummy</div>
                         </div>
                         <field name="product_tmpl_id"/>

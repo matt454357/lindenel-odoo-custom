@@ -4,7 +4,7 @@
 {
     "name": "Valve Exchange Tracking",
     "summary": "Track exchanged products without the management overhead of inventory or invoices.",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "development_status": "Beta",
     "author": "Matt Taylor",
     "website": "https://github.com/matt454357/lindenel-odoo-custom",
