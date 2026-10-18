@@ -15,7 +15,7 @@
             <div class="col-6" style="text-align: right;">
                 <span style="text-align: right; font-weight:bold;">Valve #:</span>
                 <span t-field="o.valve_serial_id" style="text-align: center; border-bottom-style: solid; border-width: 1px;"/>
-                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('Code128', o.valve_serial_id.name, 200, 25)" style="margin-right:-35px"/>
+                <img t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('Code128', o.valve_serial_id.name, 200, 25)" style="margin-right:-35px"/>
             </div>
         </div>
         <div class="row" style="vertical-align:bottom; font-size:25px; height:63px;">

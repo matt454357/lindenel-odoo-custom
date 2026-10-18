@@ -66,7 +66,7 @@
                         <td colspan="2">
                             <!--text-align:right; font-size:24px;-->
                             <div style="font-family:'Code 128'; font-size:72px; margin:-18px -18px -18px -18px" t-field="o.track_code128"/>
-                            <!--<img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('Code128', o.core_track_num, 300, 50)"/>-->
+                            <!--<img t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('Code128', o.core_track_num, 1000, 200)" style="width:450px; height:72px; margin:0px -70px -18px 0px;"/>-->
                         </td>
                     </tr>
                 </table>

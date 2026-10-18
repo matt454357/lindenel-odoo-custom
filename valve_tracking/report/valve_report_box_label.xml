@@ -21,7 +21,7 @@
                 <div class="col-6" style="display:table-cell; float:none; vertical-align:top; text-align:right;">
                     <div style="font-size:70px; font-weight:bold; line-height: 1.1;" t-field="o.valve_serial_id"/>
                     <!--<div style="font-family:'Code 128'; font-size:72px; margin:-18px -18px -28px -18px" t-field="o.track_code128"/>-->
-                    <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('Code128', o.valve_serial_id.name, 500, 80)" style="width:250px; height:40px;"/>
+                    <img t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('Code128', o.valve_serial_id.name, 500, 80)" style="width:250px; height:40px;"/>
                 </div>
             </div>
 
@@ -43,7 +43,7 @@
                     <t t-if="info_url">
                         <img
                             style="display:inline-block; width: 120px; height: 120px; image-rendering: -webkit-optimize-contrast;"
-                            t-att-src="'/report/barcode/?type=QR&amp;value=%s&amp;width=%s&amp;height=%s' % (info_url, 300, 300)"
+                            t-att-src="'/report/barcode/?barcode_type=QR&amp;value=%s&amp;width=%s&amp;height=%s' % (info_url, 300, 300)"
                             alt="QR Code"/>
                     </t>
                     <!--<span t-field="o.partner_id.name"/>-->
